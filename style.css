@@ -1,0 +1,63 @@
+* {
+   font-family: 'Titillium Web', sans-serif;
+   color: white;
+   font-size: 1.0em;
+   background-color: #020202;
+}
+
+body {
+	padding-top: 1em;
+}
+
+fieldset {
+	float:left;
+    display: block;
+    border: 2px solid;
+	border-bottom: 0px;
+	border-color: #0F0F0F;
+	
+	margin-top: 0px;
+	margin-bottom: 0px;
+    margin-left: 2px;
+    margin-right: 2px;
+	
+    padding-top: 0px;
+    padding-bottom: 4px;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+legend {
+    display: block;
+    padding-left: 0px;
+    padding-right: 0px;
+    border: none;
+	font-style: italic;
+}
+
+p {
+    display: block;
+    margin-top: 0em;
+    margin-bottom: 0em;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#sidebar {
+	width: 16%;
+	margin-left: 9%;
+	display: block;
+	float: left;
+}
+
+#nav1 {
+	width: 20%;
+}
+
+#nav2 {
+	width: 40%;
+}
+
+button:focus {
+  outline: 0;
+}
