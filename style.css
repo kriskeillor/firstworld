@@ -1,27 +1,41 @@
 * {
-   font-family: 'Titillium Web', sans-serif;
-   color: white;
-   font-size: 1.0em;
-   background-color: #020202;
+    font-family: 'Titillium Web', sans-serif;
+    color: white;
+    font-size: 1.0em;
+    background-color: #020202;
+   
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    margin-right: 4px;
+   
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+/* Text */
+p {
+    display: block;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 body {
-	padding-top: 1em;
+    padding-top: 1em;
+}
+
+/* Text Formatting */
+form {
+	margin-top: 1.15em;
 }
 
 fieldset {
-	float:left;
+    float:left;
     display: block;
     border: 2px solid;
-	border-bottom: 0px;
-	border-color: #0F0F0F;
-	
-	margin-top: 0px;
-	margin-bottom: 0px;
-    margin-left: 2px;
-    margin-right: 2px;
-	
-    padding-top: 0px;
+    border-bottom: 0px;
+    border-color: #A7A7A7;
+   
     padding-bottom: 4px;
     padding-left: 1em;
     padding-right: 1em;
@@ -32,30 +46,56 @@ legend {
     padding-left: 0px;
     padding-right: 0px;
     border: none;
-	font-style: italic;
+    font-style: italic;
 }
 
-p {
-    display: block;
-    margin-top: 0em;
-    margin-bottom: 0em;
-    margin-left: 0;
-    margin-right: 0;
+table {
+    border-spacing: 0px;
 }
 
+td.vital {
+    text-align: right;
+    width: 55px;
+}
+
+/* GUI */
+.bar {
+    width: 0%;
+    height: 1em;
+    background-color: #454545;
+}
+
+.clicker {
+    cursor: pointer;
+    cursor: hand;
+    font-style: italic;
+}
+
+/* Content Structure */
 #sidebar {
-	width: 16%;
-	margin-left: 9%;
-	display: block;
+    width: 16%;
+    margin-left: 9%;
+    display: block;
+    float: left;
+}
+
+#expo {
 	float: left;
 }
 
-#nav1 {
-	width: 20%;
+#cap {
+    width: 20%;
+    display: none;
 }
 
-#nav2 {
-	width: 40%;
+#runner {
+    width: 40%;
+    display: none;
+}
+
+#bush {
+    width: 20%;
+    display: none;
 }
 
 button:focus {

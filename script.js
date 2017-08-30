@@ -1,35 +1,94 @@
 // star
-altitude = 0;
+altitude = -6;
 increment = 0.1;
-
+ 
 // surface
 lux = 0;
+ 
+var opening = {
+	1: "thick fog obscuring the riverbank.",
+	2: "reeds and cattails swaying in the mist.",
+	3: "other, darker shapes shift just beyond your eyesight.",
+	4: "water moves at a steady clip.",
+	5: "unfocused. water flows together. edge sharpens.",
+	6: "notice something that isn't there.",
+	7: "ahead, rapids. aside, tracking.",
+	8: "feel them looking. not at you, at the package.",
+	9: "shadows roll off distant mountains.",
+	10: "sucking mud and bottom feeders grab you.",
+	11: "the package bobs in the water.",
+	12: "first rays of light peek through.",
+	13: "fog starts to clear. catch a glimpse of them looking back.",
+	14: "warm sun touches your skin.",
+	15: "better stop while there's daylight.",
+	len: 15,
+	count: 0,
 
-function cycle(){
+	nextMsg: '<a onClick="expoNext();" class="clicker">keep going</a> | ',
+	stopMsg: '<a onClick="expoStop();" class="clicker">stop here</a>'
+};
+ 
+function load() {
+	expoNext();
+	cycle();
+}
+ 
+function cycle() {
 	setInterval(function() {
-		// move star 
+		// altitude
 		altitude += increment;
 		if (altitude >= 90)
 			increment *= -1;
 		if (altitude <= -90)
 			increment *= -1;
 		document.getElementById('altitude').innerHTML = Math.round(altitude);
-		
-		// set lux
+	   
+		// lux
 		if (altitude > -10)
 			lux = clamp(Math.pow(altitude + 10, 2), 0, 100000);
 		else
 			lux = 0;
-		document.getElementById('lux').innerHTML = roundToTenth(lux);
-		
-		// set time of day 
-		//if (altitude > 0)
-		//	document.getElementById('surface').innerHTML = "Daytime";
-		//else if (altitude >= -6)
-		//	document.getElementById('surface').innerHTML = "Twilight";
-		//else 
-		//	document.getElementById('surface').innerHTML = "Night";
+		var roundedLux = roundToTenth(lux);
+		document.getElementById('lux').innerHTML = roundedLux;
+		if (roundedLux % 1 == 0)
+			document.getElementById('lux').innerHTML += ".0";
+	   
+		// time of day
+		tod = document.getElementById('tod');
+		if (altitude > 0 && tod.innerHTML == "dawn.")
+			tod.innerHTML = "day.";
+		else if (altitude < 0 && tod.innerHTML == "day.")
+			tod.innerHTML = "dusk.";
+		else if (altitude < -6 && tod.innerHTML == "dusk.")
+			tod.innerHTML = "night.";
+		else if (altitude > -6 && tod.innerHTML == "night.")
+			tod.innerHTML = "dawn.";
 	}, 100);
+}
+
+function expoNext() {
+	opening.count += Math.floor(Math.random() * 2) + 1;
+	opening.count = Math.min(opening.count, opening.len);
+	
+	document.getElementById('expoMessage').innerHTML += "<br>" + opening[opening.count];
+	if (opening.count == opening.len)
+		document.getElementById('expoButtons').innerHTML = opening.stopMsg;
+	else
+		document.getElementById('expoButtons').innerHTML = opening.nextMsg + opening.stopMsg;
+}
+
+function expoStop() {
+	document.getElementById('expoButtons').innerHTML = "";
+	document.getElementById('expoMessage').innerHTML = "";
+	
+	document.getElementById('bush').style.display = "inline";
+	document.getElementById('runner').style.display = "inline";
+}
+
+function fillBar(id) {
+	if (test < 100)
+		test += 1;
+	document.getElementById(id).style.width = test + '%';
 }
 
 function roundToTenth(n){

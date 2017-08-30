@@ -1,36 +1,64 @@
 <!DOCTYPE html>
 <html><head>
-	<title>exoplanet</title>
-	<script src="script.js"></script>
-	<link rel="stylesheet" type="text/css" href="style.css">
+    <title>exoplanet</title>
+    <script src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
-<body onload='cycle()'>
-	<div id="sidebar">
-		Luminosity: <span id='lux'>0</span> klx <br>
-		Solar Altitude: <span id='altitude'>0</span>&deg; <br>
-		Solar Azimuth: 0&deg; <br>
-		Windspeed: 0 kph<br><br><br><br><br>
-	</div>
+<body onload='load()'>
+    <div id="sidebar">
+        <table>
+            <tr>
+                <td>Luminosity</td>
+                <td id="lux" class="vital">0</td>
+                <td>klx</td></tr>
+            <tr>
+                <td>Solar Altitude</td>
+                <td id="altitude" class="vital">-6</td>
+                <td>&deg;</td></tr>
+            <tr>
+                <td>Solar Azimuth</td>
+                <td id="azimuth" class="vital">0</td>
+                <td>&deg;</td></tr>
+            <tr>
+                <td>Windspeed</td>
+                <td id="windspeed" class="vital">0</td>
+                <td>kph</td></tr>
+            <tr>
+                <td>Temperature</td>
+                <td id="temp" class="vital">22</td>
+                <td>&deg; C</td></tr>
+        </table>
+    </div>
 	
-	dawn. <br><br>
+    <p id='tod'>dawn.</p>
+   
+    <div id='expo'>
+		<span id="expoMessage"></span>
+		<span id="expoButtons"></span>
+    </div>
 	
-	<form>
-		<fieldset id='nav1'>
-			<legend>Capital</legend>
-			<p id="signal"></p>
-		</fieldset>
-		
-		<fieldset id='nav2'>
-			<legend>Frontrunner</legend>
-			<p id="generation"></p>
-			<p id="capacitance"></p>
-			
-			<p id="textiles"></p>
-			<p id="alloy"></p>
-			<p id="circuitry"></p>
-			<p id="explosives"></p>
-			<p id=""></p>
-		</fieldset>
-	</form> 
+    <form>
+        <fieldset id='cap'>
+            <legend>Capital</legend>
+            <p id="signal"></p>
+        </fieldset>
+       
+        <fieldset id='runner'>
+            <legend>Frontrunner</legend>
+            <p id="personnel"></p>
+            <p id="generation"></p>
+            <p id="capacitance"></p>
+           
+            <p id="textiles"></p>
+            <p id="alloy"></p>
+            <p id="circuitry"></p>
+            <p id="explosives"></p>
+            <p id=""></p>
+        </fieldset>
+       
+        <fieldset id='bush'>
+            <legend>Bush</legend>
+        </fieldset>
+    </form>
 </body></html>
