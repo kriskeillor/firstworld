@@ -29,7 +29,12 @@ var opening = {
 };
  
 function load() {
+	minNavPane("cap");
+	minNavPane("runner");
+	minNavPane("bush");
+	
 	expoNext();
+	
 	cycle();
 }
  
@@ -81,8 +86,27 @@ function expoStop() {
 	document.getElementById('expoButtons').innerHTML = "";
 	document.getElementById('expoMessage').innerHTML = "";
 	
-	document.getElementById('bush').style.display = "inline";
-	document.getElementById('runner').style.display = "inline";
+	maxNavPane("bush");
+}
+
+function buildRunner() {
+	maxNavPane('runner');
+	smallNavPane('bush');
+}
+
+function maxNavPane(pane) {
+	document.getElementById(pane).style.width = "40%";
+	document.getElementById(pane).style.display = "inline";
+}
+
+function smallNavPane(pane) {
+	document.getElementById(pane).style.width = "20%";
+	document.getElementById(pane).style.display = "inline";
+}
+
+function minNavPane(pane) {
+	document.getElementById(pane).style.width = "0%";
+	document.getElementById(pane).style.display = "none";
 }
 
 function fillBar(id) {

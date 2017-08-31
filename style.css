@@ -7,7 +7,7 @@
     margin-top: 0px;
     margin-bottom: 0px;
     margin-left: 0px;
-    margin-right: 4px;
+    margin-right: 0px;
    
     padding-top: 0px;
     padding-bottom: 0px;
@@ -32,10 +32,12 @@ form {
 fieldset {
     float:left;
     display: block;
-    border: 2px solid;
+    margin-right: 4px;
+	
+	border: 2px solid;
     border-bottom: 0px;
     border-color: #A7A7A7;
-   
+	
     padding-bottom: 4px;
     padding-left: 1em;
     padding-right: 1em;
@@ -81,21 +83,6 @@ td.vital {
 
 #expo {
 	float: left;
-}
-
-#cap {
-    width: 20%;
-    display: none;
-}
-
-#runner {
-    width: 40%;
-    display: none;
-}
-
-#bush {
-    width: 20%;
-    display: none;
 }
 
 button:focus {
