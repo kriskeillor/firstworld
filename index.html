@@ -1,67 +1,101 @@
 <!DOCTYPE html>
-<html><head>
-    <title>exoplanet</title>
-    <script src="script.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+<html >
+<head>
+	<meta charset="UTF-8">
+	<title>Beggard</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/index.js"></script>
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 </head>
 
 <body onload='load()'>
-    <div id="sidebar">
-        <table>
-            <tr>
-                <td>Luminosity</td>
-                <td id="lux" class="vital">0</td>
-                <td>klx</td></tr>
-            <tr>
-                <td>Solar Altitude</td>
-                <td id="altitude" class="vital">-6</td>
-                <td>&deg;</td></tr>
-            <tr>
-                <td>Solar Azimuth</td>
-                <td id="azimuth" class="vital">0</td>
-                <td>&deg;</td></tr>
-            <tr>
-                <td>Windspeed</td>
-                <td id="windspeed" class="vital">0</td>
-                <td>kph</td></tr>
-            <tr>
-                <td>Temperature</td>
-                <td id="temp" class="vital">22</td>
-                <td>&deg; C</td></tr>
-        </table>
-    </div>
-	
-    <p id='tod'>dawn.</p>
-	
-    <div id='expo'>
-		<span id="expoMessage"></span>
-		<span id="expoButtons"></span>
-    </div>
-	
-    <form>
-        <fieldset id='cap'>
-            <legend>Capital</legend>
-            <p id="signal"></p>
-        </fieldset>
-       
-        <fieldset id='runner'>
-            <legend>Frontrunner</legend>
-            <p id="personnel"></p>
-            <p id="generation"></p>
-            <p id="capacitance"></p>
-           
-            <p id="textiles"></p>
-            <p id="alloy"></p>
-            <p id="circuitry"></p>
-            <p id="explosives"></p>
-            <p id=""></p>
-        </fieldset>
-       
-        <fieldset id='bush'>
-            <legend>Bush</legend>
-			<a onClick="buildRunner();" class="clicker">Build the thinger</a>
-        </fieldset>
-    </form>
-</body></html>
+	<div class='svgContainer'>
+		<svg class='svgbg' width="800" height="450" id="planet">
+			<!--<line id='axis' stroke='white' stroke-width='2' 
+				x1='567' y1='-50' x2='433' y2='450'/>
+			
+			<!--<line id='plane' stroke='white' stroke-width='2'
+				x1='0' y1='200' x2='1200' y2='200'/>-->
+			
+			<circle cx="500" cy="200" r="100"/>
+			
+			<path id='dawn' stroke-width="0" fill="#a30e06" " d="
+				M 500 100
+				A 100 100 0 0 1 500 300"/>
+			
+			<!--below will be used for full day cycle-->
+			<!--<path id='day' stroke-width="0" fill="#FFFFFF"  d="
+				M 500 100
+				A 100 100 0 0 1 500 300"/>
+				
+			<path id='dusk' stroke-width="0" fill="#a30e06" d="
+				M 500 100
+				A 100 100 0 0 1 500 300"/>
+			
+			<path id='arc' stroke="white" stroke-width="0" fill="white" fill-opacity="0.5" d="
+				M 500 100
+				A 100 100 0 0 1 500 300"/>-->
+		</svg>
+		
+		<div class='overlay'>
+			<div id="sidebar">
+				<table>
+					<tr>
+						<td>Luminosity</td>
+						<td id="lux" class="vital">0</td>
+						<td>klx</td></tr>
+					<tr>
+						<td>Solar Altitude</td>
+						<td id="altitude" class="vital">-6</td>
+						<td>&deg;</td></tr>
+					<tr>
+						<td>Solar Azimuth</td>
+						<td id="azimuth" class="vital">0</td>
+						<td>&deg;</td></tr>
+					<tr>
+						<td>Windspeed</td>
+						<td id="windspeed" class="vital">0</td>
+						<td>kph</td></tr>
+					<tr>
+						<td>Temperature</td>
+						<td id="temp" class="vital">22</td>
+						<td>&deg; C</td></tr>
+				</table>
+			</div>
+			
+			<p id='tod'>dawn.</p>
+			
+			<div id='expo'>
+				<span id="expoMessage"></span>
+				<span id="expoButtons"></span>
+			</div>
+			
+			<form>
+				<fieldset id='cap'>
+					<legend>Capital</legend>
+					<p id="signal"></p>
+				</fieldset>
+			   
+				<fieldset id='runner'>
+					<legend>Frontrunner</legend>
+					<p id="personnel"></p>
+					<p id="generation"></p>
+					<p id="capacitance"></p>
+				   
+					<p id="textiles"></p>
+					<p id="alloy"></p>
+					<p id="circuitry"></p>
+					<p id="explosives"></p>
+					<p id=""></p>
+				</fieldset>
+			   
+				<fieldset id='bush'>
+					<legend>Bush</legend>
+					<a onClick="buildRunner();" class="clicker">Build the thinger</a>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+</body>
+</html>
