@@ -5,8 +5,8 @@ var p = {
 	angle:	0,			// relative to star, in degrees 
 	
 	origin:	{ 
-		x:	700, 
-		y:	300,
+		x:	300, 
+		y:	450,
 	},
 };
 

@@ -12,30 +12,30 @@
 
 <body onload='load()'>
 	<div class='svgContainer'>
-		<svg class='svgbg' width="800" height="450" id="planet">
-		<!--<line id='axis' stroke='white' stroke-width='2' 
-				x1='567' y1='-50' x2='433' y2='450'/>
-			<line id='plane' stroke='white' stroke-width='2'
-				x1='0' y1='200' x2='1200' y2='200'/>-->
+		<svg class='svgbg' width="800" height="600" id="planet">
+			<defs>
+				<filter id="blur" >
+					<feGaussianBlur in="SourceGraphic" stdDeviation="7" />
+				</filter>
+			</defs>
 			
-			<circle cx="500" cy="200" r="100"/>
+			<circle fill="white" cx="300" cy="450" r="100" filter="url(#blur)"0/>
 			
-			<path id='dawn' stroke-width="0" fill="#a30e06" " d="
-				M 500 100
+			<path id='dawn' stroke-width="0" fill="#fcb54d" " d="
+				M 300 350
 				A 100 100 0 0 1 500 300"/>
 			
-			<!--below will be used for full day cycle-->
-			<!--<path id='day' stroke-width="0" fill="#FFFFFF"  d="
-				M 500 100
-				A 100 100 0 0 1 500 300"/>
+			<path id='day' stroke-width="0" fill="#98bdac"  d="
+				M 300 350
+				A 100 100 0 0 1 300 550"/>
 				
-			<path id='dusk' stroke-width="0" fill="#a30e06" d="
-				M 500 100
-				A 100 100 0 0 1 500 300"/>
-			
-			<path id='arc' stroke="white" stroke-width="0" fill="white" fill-opacity="0.5" d="
-				M 500 100
-				A 100 100 0 0 1 500 300"/>-->
+			<path id='dusk' stroke-width="0" fill="#fcb54d" d="
+				M 300 350
+				A 100 100 0 0 1 300 550"/>
+				
+			<path id='night' stroke-width="0" fill="#090719" d="
+				M 300 350
+				A 100 100 0 0 1 300 550"/>
 		</svg>
 		
 		<div class='overlay'>
