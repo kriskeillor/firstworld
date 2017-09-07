@@ -5,8 +5,8 @@ var p = {
 	angle:	0,			// relative to star, in degrees 
 	
 	origin:	{ 
-		x:	500, 
-		y:	200,
+		x:	700, 
+		y:	300,
 	},
 };
 
@@ -14,7 +14,7 @@ var p = {
 p.north = {
 	x:	-Math.cos(toRad(p.tilt)) * p.r + p.origin.x,
 	y:	-Math.sin(toRad(p.tilt)) * p.r + p.origin.y,
-},
+}
 p.south = {
 	x:	Math.cos(toRad(p.tilt)) * p.r + p.origin.x,
 	y:	Math.sin(toRad(p.tilt)) * p.r + p.origin.y,
@@ -39,31 +39,32 @@ function writeArc(xRad, yRad, rotation, sweepFlag, endX, endY) {
 		return "A " + xRad + ' ' + yRad + ' ' + rotation + " 0 " + sweepFlag + ' ' + endX + ' ' + endY;
 }
 
+//	note: will not work for arclengths > 180deg
+//	(requires drawing 4 arc segments - may implement later, probably not )
 function writeBand(id, leading, trailing, xray) {
 	leading = wrapDegrees(leading);
 	trailing = wrapDegrees(trailing);
+	arclength = wrapDegrees(leading - trailing);
 	
-	var leadRadius;
-	if (!xray && (leading > 180)) // || leading < 0))	// deprecated by new wrapDegrees
+	var leadRadius, trailRadius;
+	if (leading > 180 && trailing <= 180)
+	{
 		leadRadius = -p.r;
-	else
+		trailRadius = Math.cos(toRad(trailing)) * p.r;
+	}
+	else if (leading < 180 && trailing >= 180)
+	{
 		leadRadius = Math.cos(toRad(leading)) * p.r;
-	
-	var trailRadius;
-	if (!xray && (trailing > 180)) // || trailing < 0))	// deprecated by new wrapDegrees
-		trailRadius = -p.r;
+		trailRadius = p.r;
+	}
 	else
-		trailRadius	= Math.cos(toRad(trailing)) * p.r;
-	
-	if (!xray) {
-		if (trailing < 180 && leading > 180)
-			leadRadius = p.r;
-		if (leading > 180 && trailing < 180)
-			leadRadius = p.r;
+	{
+		leadRadius = Math.cos(toRad(leading)) * p.r;
+		trailRadius = Math.cos(toRad(trailing)) * p.r;
 	}
 	
 	var path;
-	if (!xray && (leading == 180 && trailing == 0))
+	if (!xray && (leading > 180 && trailing > 180))
 		path = "";
 	else {
 		var leadSweep = 0;
