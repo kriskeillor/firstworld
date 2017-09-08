@@ -3,6 +3,9 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Beggard</title>
+	<script src="js/engine.js"></script>
+	<script src="js/scene.js"></script>
+	<script src="js/util.js"></script>
 	<script src="js/ui.js"></script>
 	<script src="js/ani.js"></script>
 	<link rel="stylesheet" href="css/style.css">
@@ -23,7 +26,7 @@
 			
 			<path id='dawn' stroke-width="0" fill="#fcb54d" " d="
 				M 300 350
-				A 100 100 0 0 1 500 300"/>
+				A 100 100 0 0 1 300 550"/>
 			
 			<path id='day' stroke-width="0" fill="#98bdac"  d="
 				M 300 350
@@ -66,31 +69,17 @@
 			
 			<p id='tod'>dawn.</p>
 			
-			<div id='expo'>
-				<span id="expoMessage"></span>
-				<span id="expoButtons"></span>
-			</div>
-			
 			<form>
-				<fieldset id='cap'>
-					<legend>Capital</legend>
-					<p id="signal"></p>
+				<fieldset id='log'>
+					<legend>Arbiter's Log</legend>
+					<p>test p</p>
 				</fieldset>
-			   
-				<fieldset id='runner'>
+				
+				<fieldset id='p1'>
 					<legend>Frontrunner</legend>
-					<p id="personnel"></p>
-					<p id="generation"></p>
-					<p id="capacitance"></p>
-				   
-					<p id="textiles"></p>
-					<p id="alloy"></p>
-					<p id="circuitry"></p>
-					<p id="explosives"></p>
-					<p id=""></p>
 				</fieldset>
-			   
-				<fieldset id='bush'>
+				
+				<fieldset id='p2'>
 					<legend>Bush</legend>
 					<a onClick="buildRunner();" class="clicker">Build the thinger</a>
 				</fieldset>

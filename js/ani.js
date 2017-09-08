@@ -20,16 +20,6 @@ p.south = {
 	y:	Math.sin(toRad(p.tilt)) * p.r + p.origin.y,
 }
 
-function toRad(deg) {
-	return (deg / 180) * Math.PI;
-}
-
-function wrapDegrees(deg) {
-	while (deg < 0) 
-		deg += 360;
-	return deg % 360;
-}
-
 function writeArc(xRad, yRad, rotation, sweepFlag, endX, endY) {
 	// radius 0 glitches arc rendering, so draw a line instead 
 	if (Math.floor(xRad) == 0 || Math.floor(yRad) == 0 || 
