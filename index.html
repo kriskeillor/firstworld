@@ -67,21 +67,20 @@
 				</table>
 			</div>
 			
-			<p id='tod'>dawn.</p>
+			<p>
+				<span id='tod'>dawn.</span> | 
+				<a id='logButton' onClick="openLog();" class="clicker">log (0)</a>
+			</p>
 			
 			<form>
 				<fieldset id='log'>
-					<legend>Arbiter's Log</legend>
-					<p>test p</p>
+					<legend id="logLeg">Arbiter's Log</legend>
+					<div id="logCon"></div>
 				</fieldset>
 				
-				<fieldset id='p1'>
-					<legend>Frontrunner</legend>
-				</fieldset>
-				
-				<fieldset id='p2'>
-					<legend>Bush</legend>
-					<a onClick="buildRunner();" class="clicker">Build the thinger</a>
+				<fieldset id='ui'>
+					<legend id="uiLeg">Hangar</legend>
+					<div id="uiCon"></div>
 				</fieldset>
 			</form>
 		</div>

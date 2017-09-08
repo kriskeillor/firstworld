@@ -3,12 +3,18 @@ var p = {
 	r:		100,		// planet radius, in pixels 
 	tilt:	105,		// pole tilt, counterclowckwise from x-axis 
 	angle:	0,			// relative to star, in degrees 
+	lux:	0,
 	
 	origin:	{ 
 		x:	300, 
 		y:	450,
 	},
 };
+
+//	s for system (will have more properties later)
+var s = {
+	altitude:	-6,
+}
 
 //	initialize pole positions, as we can't reference r/tilt in the p initializer 
 p.north = {
@@ -18,6 +24,14 @@ p.north = {
 p.south = {
 	x:	Math.cos(toRad(p.tilt)) * p.r + p.origin.x,
 	y:	Math.sin(toRad(p.tilt)) * p.r + p.origin.y,
+}
+
+//	called by engine.js to run animations 
+function animate() {
+	writeBand('dawn', p.angle+97, p.angle+89, false);
+	writeBand('day', p.angle+90, p.angle-90, false);
+	writeBand('dusk', p.angle-89, p.angle-97, false);
+	writeBand('night', p.angle-96, p.angle+96, false);
 }
 
 function writeArc(xRad, yRad, rotation, sweepFlag, endX, endY) {

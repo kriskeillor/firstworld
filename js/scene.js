@@ -1,23 +1,71 @@
-function load() {
+var res = {
+	canvas:	0,
+	panels:	0,
+	keys:	0,
+};
+
+var tasks = {
+	'castOff': {
+		msg:	"cast off",
+		cost:	0,
+		time:	250,
+		power:	0,
+		unlocks: [ 'rollOut', 'openPanels' ],
+		gain: {
+			canvas:	3,
+		}
+	},
+	
+	'takeBag': {
+		msg:	"take bag",
+		cost: 	0, 
+		time: 	150, 
+		power:	0,
+		unlocks:0,
+		gain: { 
+			canvas:	1,
+			keys:	1, 
+		}
+	},
+	
+	'rollOut': {
+		msg:	"roll out",
+		cost:	0, 
+		time:	500, 
+		power:	0,
+		unlocks: [ 'kickstart' ]
+	},
+	
+	'openPanels': {
+		msg:	"open panels",
+		cost:	0,
+		time:	250,
+		power:	0,
+		unlocks: 0,
+		gain: {
+			panels:	1,
+		}
+	},
+	
+	'kickstart': {
+		msg:	"kickstart",
+		cost: {
+			keys:	1,
+		},
+		time:	75,
+		power:	1,
+		unlocks: [ 'wheelsUp' ],
+	},
+	
+	'wheelsUp': {
+		msg:	"end demo",
+	}
+};
+
+function initScene() {
 	minNavPane("log");
-	smallNavPane("p1");
-	minNavPane("p2");
+	maxNavPane("ui");
 	
-	cycle();
-	
-	setInterval(function() {
-		//angle = noonline
-		//var lead = wrapDegrees(angle+90);
-		//var trail = wrapDegrees(angle-90);
-		
-		// dawn/dusk bands are 6 deg long, but have +1 deg on either end to help aliasing 
-		writeBand('dawn', p.angle+97, p.angle+89, false);
-		writeBand('day', p.angle+90, p.angle-90, false);
-		writeBand('dusk', p.angle-89, p.angle-97, false);
-		writeBand('night', p.angle-96, p.angle+96, false);
-		
-		//	!! 
-		p.angle += increment;
-		p.angle %= 360;
-	}, 20);
+	addTask('castOff');
+	addTask('takeBag');
 }
