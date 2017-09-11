@@ -5,6 +5,8 @@ var res = {
 };
 
 var tasks = {
+	active: [],
+	
 	'castOff': {
 		msg:	"cast off",
 		cost:	0,
@@ -52,13 +54,14 @@ var tasks = {
 		cost: {
 			keys:	1,
 		},
-		time:	75,
+		time:	25,
 		power:	1,
 		unlocks: [ 'wheelsUp' ],
 	},
 	
 	'wheelsUp': {
 		msg:	"end demo",
+		time:	0,
 	}
 };
 

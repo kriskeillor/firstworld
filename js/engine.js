@@ -5,6 +5,7 @@ function load() {
 	setInterval(function() {
 		moveSystem();
 		writeSurface();
+		updateTasks();
 	}, 20);
 }
 

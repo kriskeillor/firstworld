@@ -94,6 +94,7 @@ td.vital {
 .bar {
     width: 0%;
     height: 1em;
+	white-space: nowrap; 
     background-color: #454545;
 }
 
