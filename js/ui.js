@@ -46,6 +46,14 @@ function startTask(id) {
 		}
 	}
 	
+	for (i = 0; i < res.list.length; i++) {
+		var resName = res.list[i];
+		var count = tasks[id].cost[resName];
+		if (count > 0)
+		//console.log("spending " + tasks[id].cost[resName] + resName);
+			spendRes(resName, tasks[id].cost[resName]);
+	}
+	
 	tasks[id].timer = tasks[id].life;
 	tasks.active.push(id);
 }
@@ -84,6 +92,7 @@ function finishTask(id) {
 	
 	if (tasks[id].cool > 0) {
 		if (!tasks[id].cooling) {
+			getResFromTask(id);
 			tasks[id].cooling = true;
 			tasks[id].timer = tasks[id].cool;
 		}
@@ -96,12 +105,33 @@ function finishTask(id) {
 		return;
 	}
 	else {
-		document.getElementById("bar" + id).outerHTML = "";
-		
+		getResFromTask(id);
 		index = tasks.active.indexOf(id);
 		tasks.active.splice(index, 1);
+		
+		document.getElementById("bar" + id).outerHTML = "";
 		delete tasks[id];	
 	}
+}
+
+function getResFromTask(id) {
+	for (i = 0; i < res.list.length; i++)
+	{
+		var resName = res.list[i];
+		var count = tasks[id].gain[resName];
+		if (count > 0) {
+			gainRes(resName, count);
+		}
+	}
+}
+
+function gainRes(resName, count) {
+	if (res.discovered.indexOf(resName) == -1)
+		discoverRes(resName);
+	
+	console.log("gave " + resName + " " + count);
+	res[resName] += count;
+	document.getElementById(resName + "Count").innerHTML = res[resName];
 }
 
 function discoverRes(resName) {
@@ -114,23 +144,23 @@ function discoverRes(resName) {
 }
 
 function flashRes(resName) {
-	// dawn color = fcb54d
-	// yourNumber.toString(16)
-	
 	res.flash[resName] = 1.0;
 }
 
-function spendRes(resName) {
-	// decrement counter in res and html 
+function spendRes(resName, cost) {
+	res[resName] -= cost;
+	document.getElementById(resName + "Count").innerHTML = res[resName];
 }
 
 function updateFlashes() {
 	var nodes = document.getElementsByClassName('resCounter');
 	for (i = 0; i < nodes.length; i++) {
 		var resName = nodes[i].id;
-		var bg = "rgba(252, 181, 77, " + res.flash[resName] + ")";			//"#" + res.flash[resName].toString(16);
-		console.log(bg);
+		var bg = "rgba(252, 181, 77, " + res.flash[resName] + ")";
 		nodes[i].style.backgroundColor = bg;
-		res.flash[resName] *= 0.9;
+		res.flash[resName] -= 0.04;
+		res.flash[resName] *= 0.96;
+		
+		// if res.flash[resName] < 0 ... can just get rid of it 
 	}
 }

@@ -71,4 +71,5 @@ function initScene() {
 	minNavPane('res');
 	
 	addTask('window');
+	addTask('gather');
 }
