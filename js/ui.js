@@ -24,9 +24,10 @@ function closeLog() {
 }
 
 function addTask(id) {
-	js = 'onClick="startTask(\''+id+'\');"';
-	bar = "<div id='bar" + id + "' class='bar'>"
-	document.getElementById('ui').innerHTML += "<p>" + bar + "<a id='" + id + "'" + js + " class='clicker'>" + tasks[id].msg + "</div></p>";
+	var js = 'onClick="startTask(\''+id+'\');"';
+	var bar = "<div id='bar" + id + "' class='bar'>"
+	var html = "<p>" + bar + "<a id='" + id + "'" + js + " class='clicker'>";
+	document.getElementById('ui').innerHTML += html + tasks[id].msg + "</div></p>";
 }
 
 function startTask(id) {
@@ -50,6 +51,11 @@ function startTask(id) {
 	
 	if (lackRes)
 		return;
+	
+	if (tasks[id].start != 0) {
+		console.log('run ' + id + ' start function');
+		tasks[id].start();
+	}
 	
 	for (i = 0; i < res.list.length; i++) {
 		var resName = res.list[i];
@@ -94,10 +100,6 @@ function finishTask(id) {
 			addTask(tasks[id].unlocks[i]);
 	}
 	
-	console.log('task "' + id + '" finished');
-	
-			console.log(tasks[id].fin) 
-			
 	if (tasks[id].redo == true) {
 		if (!tasks[id].cooling) {
 			getResFromTask(id);
@@ -105,7 +107,7 @@ function finishTask(id) {
 			tasks[id].timer = tasks[id].cool;
 			
 			if (tasks[id].fin != 0) {
-				console.log('task fin');
+				console.log('task ' + id + ' fin function');
 				tasks[id].fin();
 			}
 		}
@@ -122,7 +124,7 @@ function finishTask(id) {
 		index = tasks.active.indexOf(id);
 		tasks.active.splice(index, 1);
 		if (tasks[id].fin != 0) {
-			tasks[id].fin();
+			console.log('task ' + id + ' fin function');
 			tasks[id].fin();
 		}
 		

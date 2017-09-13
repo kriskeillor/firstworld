@@ -11,7 +11,7 @@ function load() {
 
 // update positions of celestial objects 
 function moveSystem() {
-	p.angle += 0.03;
+	p.angle += p.angVel;
 	p.angle %= 360;
 	
 	// dawn/dusk bands are 6 deg long, but have +1 deg on either end to help aliasing 

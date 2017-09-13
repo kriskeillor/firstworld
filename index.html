@@ -15,14 +15,14 @@
 
 <body onload='load()'>
 	<div class='svgContainer'>
-		<svg class='svgbg' width="800" height="600" id="planet">
-			<defs>
+		<svg class='svgbg' width='100vw' height='100vh' viewBox="0 0 600 800" id="planet">
+			<!--<defs>
 				<filter id="blur" >
 					<feGaussianBlur in="SourceGraphic" stdDeviation="7" />
 				</filter>
 			</defs>
 			
-			<circle fill="white" cx="300" cy="450" r="100" filter="url(#blur)"0/>
+			<circle fill="white" cx="300" cy="450" r="99" filter="url(#blur)" /> -->
 			
 			<path id='dawn' stroke-width="0" fill="#fcb54d" " d="
 				M 300 350
@@ -67,23 +67,23 @@
 				</table>
 			</div>
 			
-			<p> log (0)
+			<p id='header'> log (0)
 				<!--<a id='logButton' onClick="openLog();" class="clicker">log (<span id='logCount'>0</span>)</a>-->
 			</p>
 			
 			<form>
 				<fieldset id='log'>
-					<legend id="logLeg">Arbiter's Log</legend>
+					<legend id="logLeg">Log</legend>
 					<div id="logCon"></div>
 				</fieldset>
 				
 				<fieldset id='ui'>
-					<legend id="uiLeg">Hangar</legend>
+					<legend id="uiLeg">Outpost</legend>
 					<div id="uiCon"></div>
 				</fieldset>
 				
 				<fieldset id='res'>
-					<legend id="resLeg">Carrying</legend>
+					<legend id="resLeg">Resources</legend>
 					<table id="resCon"></table>
 				</fieldset>
 			</form>
