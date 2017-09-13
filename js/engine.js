@@ -11,7 +11,7 @@ function load() {
 
 // update positions of celestial objects 
 function moveSystem() {
-	p.angle += 0.01;
+	p.angle += 0.03;
 	p.angle %= 360;
 	
 	// dawn/dusk bands are 6 deg long, but have +1 deg on either end to help aliasing 
@@ -44,7 +44,7 @@ function writeSurface() {
 		document.getElementById('lux').innerHTML += ".0";
    
 	// time of day
-	tod = document.getElementById('tod');
+	/*tod = document.getElementById('tod');
 	if (s.altitude > 0 && tod.innerHTML == "dawn.")
 		tod.innerHTML = "day.";
 	else if (s.altitude < 0 && tod.innerHTML == "day.")
@@ -52,5 +52,5 @@ function writeSurface() {
 	else if (s.altitude < -6 && tod.innerHTML == "dusk.")
 		tod.innerHTML = "night.";
 	else if (s.altitude > -6 && tod.innerHTML == "night.")
-		tod.innerHTML = "dawn.";
+		tod.innerHTML = "dawn.";*/
 }

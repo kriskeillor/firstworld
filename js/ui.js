@@ -33,24 +33,28 @@ function startTask(id) {
 	if (tasks.active.indexOf(id) != -1)
 		return;
 	
+	var lackRes = false;
+	
 	for (i = 0; i < res.list.length; i++) {
 		var resName = res.list[i];
 		
 		if (tasks[id].cost[resName] > res[resName])
 		{
+			lackRes = true;
 			flashRes(resName);
 			
 			if (res.discovered.indexOf(resName) == -1)
 				discoverRes(resName);
-			return;
 		}
 	}
+	
+	if (lackRes)
+		return;
 	
 	for (i = 0; i < res.list.length; i++) {
 		var resName = res.list[i];
 		var count = tasks[id].cost[resName];
 		if (count > 0)
-		//console.log("spending " + tasks[id].cost[resName] + resName);
 			spendRes(resName, tasks[id].cost[resName]);
 	}
 	
@@ -90,11 +94,20 @@ function finishTask(id) {
 			addTask(tasks[id].unlocks[i]);
 	}
 	
-	if (tasks[id].cool > 0) {
+	console.log('task "' + id + '" finished');
+	
+			console.log(tasks[id].fin) 
+			
+	if (tasks[id].redo == true) {
 		if (!tasks[id].cooling) {
 			getResFromTask(id);
 			tasks[id].cooling = true;
 			tasks[id].timer = tasks[id].cool;
+			
+			if (tasks[id].fin != 0) {
+				console.log('task fin');
+				tasks[id].fin();
+			}
 		}
 		else {
 			tasks[id].cooling = false;
@@ -108,6 +121,10 @@ function finishTask(id) {
 		getResFromTask(id);
 		index = tasks.active.indexOf(id);
 		tasks.active.splice(index, 1);
+		if (tasks[id].fin != 0) {
+			tasks[id].fin();
+			tasks[id].fin();
+		}
 		
 		document.getElementById("bar" + id).outerHTML = "";
 		delete tasks[id];	
@@ -129,7 +146,6 @@ function gainRes(resName, count) {
 	if (res.discovered.indexOf(resName) == -1)
 		discoverRes(resName);
 	
-	console.log("gave " + resName + " " + count);
 	res[resName] += count;
 	document.getElementById(resName + "Count").innerHTML = res[resName];
 }

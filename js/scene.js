@@ -1,14 +1,20 @@
 var res = {
-	list: [ 'beans', 'polyester', 'powder' ],
+	list: [ 'beans', 'water', 'game', 'polythread', 'carbon fiber', 'alloy powder', 'solar cell' ],
 	discovered: [],
 	flash: { },		// transparency of background warning color upon insufficient resources 
 	
 	//natural 
 	beans:		0,
+	water:		0,
+	game:		0,
 	
 	//artificial
-	polyester:	0,
-	powder:		0,
+	polythread: 0,
+	'carbon fiber': 0,
+	'alloy powder': 0,
+	
+	// structures 
+	'solar cell':		0,
 };
 
 var tasks = {
@@ -24,6 +30,7 @@ var tasks = {
 		unlocks: [ 'coffee', 'instruments' ],
 		gain:	0,
 		redo:	false,
+		fin:	0,
 	},
 	
 	'instruments': {
@@ -35,17 +42,19 @@ var tasks = {
 		unlocks: 0,
 		gain:	0,
 		redo:	false,
+		fin:	0,
 	},
 	
 	'coffee': {
 		msg:	"brew coffee",
-		cost: { beans: 1 },
+		cost: { beans: 1, },
 		life:	300,
 		cool:	3000,
 		power:	0,
 		unlocks: 0,
 		gain:	0,
 		redo:	true,
+		fin:	0,
 	},
 	
 	'gather': {
@@ -57,7 +66,20 @@ var tasks = {
 		unlocks: 0,
 		gain: { beans: 1 },
 		redo:	true,
+		fin:	0,
 	},
+	
+	'repair': {
+		msg:	"repair solar cell",
+		cost: 	0,
+		get life() { return Math.pow(res['solar cell'] + 9, 2); },
+		cool:	1, 
+		power:	0,
+		unlocks: 0,
+		gain:	{ 'solar cell': 1 },
+		redo:	true,
+		fin:	0,
+	}
 };
 
 var state = {
@@ -71,5 +93,8 @@ function initScene() {
 	minNavPane('res');
 	
 	addTask('window');
-	addTask('gather');
+	
+	//addTask('gather');
+	//addTask('coffee');
+	//addTask('repair');
 }
