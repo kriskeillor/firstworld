@@ -2,9 +2,9 @@
 var p = {
 	r:		100,		// planet radius, in pixels 
 	tilt:	105,		// pole tilt, counterclowckwise from x-axis 
-	angle:	-86,			// relative to star, in degrees 
+	angle:	-83,		// relative to star, in degrees 
 	lux:	0,
-	angVel:	0,//0.03,
+	angVel:	0,
 	
 	origin:	{
 		x:	300, 

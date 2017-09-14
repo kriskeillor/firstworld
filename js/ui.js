@@ -16,11 +16,13 @@ function minNavPane(pane) {
 function openLog() {
 	maxNavPane("log");
 	smallNavPane("ui");
+	minNavPane("res");
 }
 
 function closeLog() {
 	minNavPane("log");
 	maxNavPane("ui");
+	smallNavPane("res");
 }
 
 function addTask(id) {
@@ -158,7 +160,10 @@ function discoverRes(resName) {
 		smallNavPane("res");
 	
 	res.discovered.push(resName);
-	resCon.innerHTML += "<tr class='resCounter' id='" + resName + "'><td>" + resName + "</td><td class='vital' id='" + resName + "Count'>" + 0 +"</td></tr>";
+	
+	var label = "<span class='resLabel'>" + resName + "</span>";
+	var counter = "<span class='resCounter' id='" + resName + "Count'>" + 0 + "</span>";
+	resCon.innerHTML += "<p id='" + resName + "' class='resRow'>" + label + counter + "</p>";
 }
 
 function flashRes(resName) {
@@ -171,7 +176,7 @@ function spendRes(resName, cost) {
 }
 
 function updateFlashes() {
-	var nodes = document.getElementsByClassName('resCounter');
+	var nodes = document.getElementsByClassName('resRow');
 	for (i = 0; i < nodes.length; i++) {
 		var resName = nodes[i].id;
 		var bg = "rgba(252, 181, 77, " + res.flash[resName] + ")";
@@ -179,6 +184,6 @@ function updateFlashes() {
 		res.flash[resName] -= 0.04;
 		res.flash[resName] *= 0.96;
 		
-		// if res.flash[resName] < 0 ... can just get rid of it 
+		// if res.flash[resName] < 0 ... can just get rid of it
 	}
 }

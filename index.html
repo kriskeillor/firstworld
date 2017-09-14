@@ -6,8 +6,8 @@
 	<script src="js/engine.js"></script>
 	<script src="js/scene.js"></script>
 	<script src="js/util.js"></script>
-	<script src="js/ui.js"></script>
 	<script src="js/ani.js"></script>
+	<script src="js/ui.js"></script>
 	<link rel="stylesheet" href="css/style.css">
 	<link rel="icon" href="favicon.ico" type="image/x-icon">
 	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
@@ -16,13 +16,13 @@
 <body onload='load()'>
 	<div class='svgContainer'>
 		<svg class='svgbg' width='100vw' height='100vh' viewBox="0 0 600 800" id="planet">
-			<!--<defs>
-				<filter id="blur" >
-					<feGaussianBlur in="SourceGraphic" stdDeviation="7" />
+			<defs>
+				<filter id="blur" color-interpolation-filters="sRGB" >
+					<feGaussianBlur id="blurFe" in="SourceGraphic" stdDeviation="0" />
 				</filter>
 			</defs>
 			
-			<circle fill="white" cx="300" cy="450" r="99" filter="url(#blur)" /> -->
+			<circle fill="white" cx="300" cy="450" r="98" filter="url(#blur)" />
 			
 			<path id='dawn' stroke-width="0" fill="#fcb54d" " d="
 				M 300 350
@@ -84,7 +84,7 @@
 				
 				<fieldset id='res'>
 					<legend id="resLeg">Resources</legend>
-					<table id="resCon"></table>
+					<div id="resCon"></div>
 				</fieldset>
 			</form>
 		</div>

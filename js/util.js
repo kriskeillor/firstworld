@@ -8,11 +8,11 @@ function wrapDegrees(deg) {
 	return deg % 360;
 }
 
-function roundToTenth(n){
+function roundToTenth(n) {
 	return Math.round(n * 10) / 10;
 }
 
-function clamp(v, min, max){
+function clamp(v, min, max) {
 	return Math.min(Math.max(v, min), max);
 }
 

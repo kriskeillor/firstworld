@@ -42,15 +42,4 @@ function writeSurface() {
 	document.getElementById('lux').innerHTML = roundedLux;
 	if (roundedLux % 1 == 0)
 		document.getElementById('lux').innerHTML += ".0";
-   
-	// time of day
-	/*tod = document.getElementById('tod');
-	if (s.altitude > 0 && tod.innerHTML == "dawn.")
-		tod.innerHTML = "day.";
-	else if (s.altitude < 0 && tod.innerHTML == "day.")
-		tod.innerHTML = "dusk.";
-	else if (s.altitude < -6 && tod.innerHTML == "dusk.")
-		tod.innerHTML = "night.";
-	else if (s.altitude > -6 && tod.innerHTML == "night.")
-		tod.innerHTML = "dawn.";*/
 }

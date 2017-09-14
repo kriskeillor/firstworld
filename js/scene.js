@@ -41,6 +41,7 @@ var tasks = {
 					var fadeColor = lerpColor(colors.dark, colors.blue, lerpVal / max);
 					var bg = "-webkit-linear-gradient(top, " + colors.dark + ", " + fadeColor + ")";
 					document.getElementsByTagName("body")[0].style.background = bg;
+					document.getElementById("blurFe").setAttribute('stdDeviation', 3.0 * (lerpVal / max));
 					
 					p.angle = -86 + 90 * smoothStep(0, 1, lerpVal / max);
 				}

@@ -87,11 +87,24 @@ table {
 
 td.vital {
     text-align: right;
-    width: 55px;
+    width: 35%;
 }
 
 .resCounter {
-	
+	float: right;
+	text-align: right;
+}
+
+.resLabel {
+	float: left;
+	text-align: left;
+}
+
+.resRow {
+	/*background-color: #454545;
+	background: #454545;*/
+	height: 1em;
+	clear: both;
 }
 
 /* GUI */
