@@ -19,6 +19,7 @@ var res = {
 };
 
 var tasks = {
+	available: [],
 	active: [],
 	
 	'window': {
@@ -27,7 +28,7 @@ var tasks = {
 		life:	100,
 		cool:	0,
 		power:	0,
-		unlocks: [ 'coffee', 'gather', 'instruments' ],
+		unlocks: [ 'coffee', 'gather' ], 
 		gain:	0,
 		redo:	false,
 		start:	function() {
@@ -71,7 +72,7 @@ var tasks = {
 		life:	300,
 		cool:	3000,
 		power:	0,
-		unlocks: 0,
+		unlocks: [ 'scout' ],
 		gain:	0,
 		redo:	true,
 		start:	0,
@@ -79,13 +80,13 @@ var tasks = {
 	},
 	
 	'gather': {
-		msg:	"gather supplies",
+		msg:	"supply run",
 		cost:	0,
-		life:	150,					// should be a function depending on needed resources 
-		cool:	5000,					// should also be a function 
+		get life() { if (neededRes() == 0) return 0; else return 150; },
+		get cool() { if (neededRes() == 0) return 0; else return 5000; },
 		power:	0,
 		unlocks: 0,
-		gain: { beans: 1 },
+		get gain() { return neededRes(); },
 		redo:	true,
 		start:	0,
 		fin:	0,
@@ -119,8 +120,8 @@ var tasks = {
 };
 
 var state = {
-	foundResources:	false,
-	foundLogs:		false,	// actually, the logs button can just be appended whenever the first is found, so this isn't needed 
+	foundRes:	false,
+	foundLogs:	false,	// actually, the logs button can just be appended whenever the first is found, so this isn't needed 
 }
 
 function initScene() {
@@ -129,4 +130,20 @@ function initScene() {
 	minNavPane('res');
 	
 	addTask('window');
+}
+
+function neededRes() {
+	if (state.foundRes == false)
+		return 0;
+	
+	var toGive = { };
+	
+	for (var i = 0; i < tasks.available.length; i++)
+	{
+		if (tasks.available[i].cost != 0) {
+			toGive['beans'] = 1;
+		}
+	}
+	
+	return toGive;
 }

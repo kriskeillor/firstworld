@@ -26,6 +26,8 @@ function closeLog() {
 }
 
 function addTask(id) {
+	tasks.available.push(id);
+	
 	var js = 'onClick="startTask(\''+id+'\');"';
 	var bar = "<div id='bar" + id + "' class='bar'>"
 	var html = "<p>" + bar + "<a id='" + id + "'" + js + " class='clicker'>";
@@ -130,6 +132,8 @@ function finishTask(id) {
 			tasks[id].fin();
 		}
 		
+		tasks.available.splice(tasks.available.indexOf(id), 1);
+		
 		document.getElementById("bar" + id).outerHTML = "";
 		delete tasks[id];	
 	}
@@ -156,8 +160,10 @@ function gainRes(resName, count) {
 
 function discoverRes(resName) {
 	var resCon = document.getElementById("resCon");
-	if (resCon.innerHTML == "")
+	if (resCon.innerHTML == "") {
+		state.foundRes = true;
 		smallNavPane("res");
+	}
 	
 	res.discovered.push(resName);
 	
