@@ -45,11 +45,11 @@ function startTask(id) {
 		
 		if (tasks[id].cost[resName] > res[resName])
 		{
-			lackRes = true;
-			flashRes(resName);
-			
 			if (res.discovered.indexOf(resName) == -1)
 				discoverRes(resName);
+			
+			lackRes = true;
+			flashRes(resName);
 		}
 	}
 	
@@ -57,7 +57,7 @@ function startTask(id) {
 		return;
 	
 	if (tasks[id].start != 0) {
-		console.log('run ' + id + ' start function');
+		console.log('start task ' + id);
 		tasks[id].start();
 	}
 	
@@ -73,7 +73,7 @@ function startTask(id) {
 }
 
 function updateTasks() {
-	finished = [];
+	var finished = [];
 	
 	for (i = 0; i < tasks.active.length; i++) {
 		var id = tasks.active[i];
@@ -99,43 +99,43 @@ function updateTasks() {
 }
 
 function finishTask(id) {
-	for (i = 0; i < tasks[id].unlocks.length; i++) { 
-		if (tasks.active.indexOf(tasks[id].unlocks[i]) == -1)
-			addTask(tasks[id].unlocks[i]);
-	}
-	
-	if (tasks[id].redo == true) {
-		if (!tasks[id].cooling) {
-			getResFromTask(id);
-			tasks[id].cooling = true;
-			tasks[id].timer = tasks[id].cool;
-			
-			if (tasks[id].fin != 0) {
-				console.log('task ' + id + ' fin function');
-				tasks[id].fin();
-			}
-		}
-		else {
-			tasks[id].cooling = false;
-			index = tasks.active.indexOf(id);
-			tasks.active.splice(index, 1);
-		}
-		
+	// Resource gathering and finishing cooldowns  
+	if (tasks[id].cooling) {
+		tasks[id].cooling = false;
+		tasks.active.splice(tasks.active.indexOf(id), 1);
 		return;
 	}
 	else {
 		getResFromTask(id);
-		index = tasks.active.indexOf(id);
-		tasks.active.splice(index, 1);
+		
 		if (tasks[id].fin != 0) {
-			console.log('task ' + id + ' fin function');
+			console.log('finish task ' + id);
 			tasks[id].fin();
 		}
 		
+		for (i = 0; i < tasks[id].unlocks.length; i++) {
+			var toAdd = tasks[id].unlocks[i];
+			if (tasks.available.indexOf(toAdd) == -1)
+				addTask(toAdd);
+		}
+	}
+	
+	// Starting cooldowns or removing tasks 
+	if (tasks[id].redo) {
+		if (tasks[id].cool > 0) {
+			tasks[id].cooling = true;
+			tasks[id].timer = tasks[id].cool;
+		}
+		else {
+			tasks.active.splice(tasks.active.indexOf(id), 1);
+			document.getElementById("bar" + id).style.width = '0%';
+		}
+	}
+	else {
+		tasks.active.splice(tasks.active.indexOf(id), 1);
 		tasks.available.splice(tasks.available.indexOf(id), 1);
-		
 		document.getElementById("bar" + id).outerHTML = "";
-		delete tasks[id];	
+		delete tasks[id];
 	}
 }
 
