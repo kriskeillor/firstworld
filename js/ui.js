@@ -30,8 +30,10 @@ function addTask(id) {
 	
 	var js = 'onClick="startTask(\''+id+'\');"';
 	var bar = "<div id='bar" + id + "' class='bar'>"
-	var html = "<p>" + bar + "<a id='" + id + "'" + js + " class='clicker'>";
-	document.getElementById('ui').innerHTML += html + tasks[id].msg + "</div></p>";
+	var html = bar + "<a id='" + id + "'" + js + " class='clicker'>";
+	document.getElementById('ui').innerHTML += html + tasks[id].msg + "</div>";
+	document.getElementById("bar" + id).style.width = "0%";
+	document.getElementById("bar" + id).style.backgroundColor = "#454545";
 }
 
 function startTask(id) {
@@ -49,7 +51,7 @@ function startTask(id) {
 				discoverRes(resName);
 			
 			lackRes = true;
-			flashRes(resName);
+			flashRes(resName, "lacking");
 		}
 	}
 	
@@ -94,8 +96,6 @@ function updateTasks() {
 	for (i = 0; i < finished.length; i++) {
 		finishTask(finished[i]);
 	}
-	
-	updateFlashes();
 }
 
 function finishTask(id) {
@@ -113,8 +113,8 @@ function finishTask(id) {
 			tasks[id].fin();
 		}
 		
-		for (i = 0; i < tasks[id].unlocks.length; i++) {
-			var toAdd = tasks[id].unlocks[i];
+		for (i = 0; i < tasks[id].unlock.length; i++) {
+			var toAdd = tasks[id].unlock[i];
 			if (tasks.available.indexOf(toAdd) == -1)
 				addTask(toAdd);
 		}
@@ -151,29 +151,49 @@ function getResFromTask(id) {
 }
 
 function gainRes(resName, count) {
-	if (res.discovered.indexOf(resName) == -1)
+	if (res.discovered.indexOf(resName) == -1) {
 		discoverRes(resName);
+		flashRes(resName, "discovered");
+	}
+	
+	if (resName == 'power' && res.power >= 10) {
+		discoverRes('capacitor');
+		flashRes('capacitor', "lacking");
+		return;
+	}
 	
 	res[resName] += count;
 	document.getElementById(resName + "Count").innerHTML = res[resName];
 }
 
 function discoverRes(resName) {
-	var resCon = document.getElementById("resCon");
-	if (resCon.innerHTML == "") {
-		state.foundRes = true;
+	if (res.discovered.indexOf(resName) != -1)
+		return;
+	
+	if (res.discovered.length == 0)
 		smallNavPane("res");
-	}
 	
 	res.discovered.push(resName);
 	
+	var resCon = document.getElementById("res");
+	
 	var label = "<span class='resLabel'>" + resName + "</span>";
 	var counter = "<span class='resCounter' id='" + resName + "Count'>" + 0 + "</span>";
-	resCon.innerHTML += "<p id='" + resName + "' class='resRow'>" + label + counter + "</p>";
+	resCon.innerHTML += "<div id='" + resName + "' class='res bar'>" + label + counter + "</div>";
 }
 
-function flashRes(resName) {
-	res.flash[resName] = 1.0;
+function flashRes(resName, indicator) {	
+	res.flash[resName].scale = 1.0;
+	var toColor;
+	
+	if (indicator == "discovered")
+		toColor = "rgba(152, 189, 172, ";
+	else if (indicator == "lacking") 
+		toColor = "rgba(252, 181, 77, ";
+	else 
+		toColor = "rgba(69, 69, 69, ";
+	
+	res.flash[resName].color = toColor;
 }
 
 function spendRes(resName, cost) {
@@ -182,14 +202,16 @@ function spendRes(resName, cost) {
 }
 
 function updateFlashes() {
-	var nodes = document.getElementsByClassName('resRow');
+	var nodes = document.getElementsByClassName('res');
 	for (i = 0; i < nodes.length; i++) {
 		var resName = nodes[i].id;
-		var bg = "rgba(252, 181, 77, " + res.flash[resName] + ")";
-		nodes[i].style.backgroundColor = bg;
-		res.flash[resName] -= 0.04;
-		res.flash[resName] *= 0.96;
+		nodes[i].style.backgroundColor = res.flash[resName].color + res.flash[resName].scale + ")";
 		
-		// if res.flash[resName] < 0 ... can just get rid of it
+		res.flash[resName].scale -= 0.04;
+		res.flash[resName].scale *= 0.96;
 	}
+}
+
+function updateRes() {
+	//...
 }

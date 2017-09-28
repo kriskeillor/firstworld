@@ -100,19 +100,11 @@ td.vital {
 	text-align: left;
 }
 
-.resRow {
-	/*background-color: #454545;
-	background: #454545;*/
-	height: 1em;
-	clear: both;
-}
-
 /* GUI */
 .bar {
-    width: 0%;
     height: 1em;
 	white-space: nowrap; 
-    background-color: #454545;
+	clear: both;
 }
 
 .clicker {

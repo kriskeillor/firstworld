@@ -6,6 +6,7 @@ function load() {
 		moveSystem();
 		writeSurface();
 		updateTasks();
+		updateFlashes();
 	}, 20);
 }
 

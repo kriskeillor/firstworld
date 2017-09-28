@@ -1,34 +1,36 @@
 var res = {
-	list: [ 'beans', 'water', 'game', 'waste', 'polythread', 'carbon fiber', 'alloy powder', 'solar cell' ],
-	discovered: [],
-	flash: { },		// transparency of background warning color upon insufficient resources 
+	list: 		[ 'water', 'game', 'power', 'waste', 'polythread', 'carbon', 'alloy', 'capacitor', 'panel' ],
+	discovered:	[],
+	flash: 		{ water: {}, game: {}, power: {}, waste: {}, polythread: {}, carbon: {}, alloy: {}, capacitor: {}, panel: {} },
 	
 	//natural 
-	beans:		0,
 	water:		0,
 	game:		0,
 	
-	//artificial
+	//artificial 
+	power:		0,
 	waste:		0,
 	polythread: 0,
-	'carbon fiber': 0,
-	'alloy powder': 0,
+	carbon:		0,
+	alloy:		0,
 	
-	// structures 
-	'solar cell':		0,
+	//structures 
+	capacitor:	1,
+	panel:		0,
+	grinder:	0,
 };
 
 var tasks = {
 	available: [],
 	active: [],
 	
-	'window': {
+	wake: {
 		msg:	"open window",
 		cost:	0,
 		life:	100,
 		cool:	0,
 		power:	0,
-		unlocks: [ 'coffee', 'gather' ], 
+		unlock: [ 'dynamo' ], //, 'gather' ], 
 		gain:	0,
 		redo:	false,
 		start:	function() {
@@ -51,13 +53,13 @@ var tasks = {
 		fin:	0,
 	},
 	
-	'instruments': {
+	instruments: {
 		msg:	"check instruments",
 		cost:	0, 
 		life:	50,
 		cool:	0,
 		power:	0,						// should this cost power? probably 
-		unlocks: [ 'scout', 'repair' ],
+		unlock: [ 'scout', 'repair' ],
 		gain:	0,
 		redo:	false,
 		start:	function () {
@@ -66,70 +68,68 @@ var tasks = {
 		fin:	0,
 	},
 	
-	'coffee': {
-		msg:	"brew coffee",
-		cost: { beans: 1, },
-		life:	300,
-		cool:	3000,
+	dynamo: {
+		msg:	"pump dynamo",
+		//get req() { 
+		cost:	0,
+		life:	0,
+		cool:	0,
 		power:	0,
-		unlocks: [ 'scout' ],
-		gain:	0,
+		unlock:0,
+		gain:	{ 'power': 1 },
 		redo:	true,
 		start:	0,
 		fin:	0,
 	},
 	
-	'gather': {
+	buildCap: {
+		msg:	"wire capacitor bank",
+		cost:	{ 'carbon': 10, 'alloy': 15 },
+		life:	250,
+		cool:	0,
+		power:	0,
+		unlock:0,
+		gain:	{ 'capacitor': 1 },
+		redo:	true,
+		start:	0,
+		fin:	0,
+	},
+	
+	gather: {
 		msg:	"supply run",
 		cost:	0,
 		get life() { if (neededRes() == 0) return 0; else return 150; },
 		get cool() { if (neededRes() == 0) return 0; else return 5000; },
 		power:	0,
-		unlocks: 0,
+		unlock: 0,
 		get gain() { return neededRes(); },
 		redo:	true,
 		start:	0,
 		fin:	0,
 	},
 	
-	'scout': {
+	scout: {
 		msg:	"scout",
 		cost:	0,
 		life:	250,
 		cool:	0,
 		power:	0,
-		unlocks: 0,
+		unlock: 0,
 		get gain() { return { waste: Math.ceil(Math.random() * 7) }; },
 		redo:	true,
 		start:	0,
 		fin:	0,
 	},
-	
-	'repair': {
-		msg:	"repair solar cell",
-		cost: 	0,
-		get life() { return Math.pow(res['solar cell'] + 9, 2); },
-		cool:	1, 
-		power:	0,
-		unlocks: 0,
-		gain:	{ 'solar cell': 1 },
-		redo:	true,
-		start:	0,
-		fin:	0,
-	}
 };
-
-var state = {
-	foundRes:	false,
-	foundLogs:	false,	// actually, the logs button can just be appended whenever the first is found, so this isn't needed 
-}
 
 function initScene() {
 	minNavPane("log");
 	maxNavPane("ui");
 	minNavPane('res');
 	
-	addTask('window');
+	addTask('wake');
+	
+	
 }
 
 function neededRes() {
