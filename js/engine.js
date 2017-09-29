@@ -32,7 +32,8 @@ function writeSurface() {
 	else 
 		s.altitude = 360 - p.angle;
 	
-	document.getElementById('altitude').innerHTML = Math.round(s.altitude);
+	document.getElementById('alti').innerHTML = Math.round(s.altitude);
+	document.getElementById('azi').innerHTML = Math.round(wrapDegrees(p.angle) + 180);
 	
 	// lux
 	if (s.altitude > -10)

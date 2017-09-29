@@ -8,7 +8,7 @@ var res = {
 	game:		0,
 	
 	//artificial 
-	power:		0,
+	power: 		0,
 	waste:		0,
 	polythread: 0,
 	carbon:		0,
@@ -18,6 +18,21 @@ var res = {
 	capacitor:	1,
 	panel:		0,
 	grinder:	0,
+};
+
+var power = { 
+	max:		0,
+	used:		0,
+}
+
+var display = {
+	lux:		true,
+	alti:		true,
+	azi:		true,
+	
+	luxCost:	2,
+	altiCost:	8,
+	aziCost:	4,
 };
 
 var tasks = {
@@ -59,18 +74,21 @@ var tasks = {
 		life:	50,
 		cool:	0,
 		power:	0,						// should this cost power? probably 
-		unlock: [ 'scout', 'repair' ],
+		unlock: [ 'scout', ],
 		gain:	0,
 		redo:	false,
 		start:	function () {
 			document.getElementById('sidebar').style.visibility = "visible";
+			
+			toggleInstruments("lux");
+			toggleInstruments("alti");
+			toggleInstruments("azi");
 		},
 		fin:	0,
 	},
 	
 	dynamo: {
 		msg:	"pump dynamo",
-		//get req() { 
 		cost:	0,
 		life:	0,
 		cool:	0,
@@ -88,9 +106,22 @@ var tasks = {
 		life:	250,
 		cool:	0,
 		power:	0,
-		unlock:0,
+		unlock: 0,
 		gain:	{ 'capacitor': 1 },
 		redo:	true,
+		start:	0,
+		fin:	0,
+	},
+	
+	repair: {
+		msg:	"repair solar panel",
+		cost:	0, //{ 'carbon': 10, 'alloy': 15 },
+		life:	250,
+		cool:	0,
+		power:	0,
+		unlock: 0,
+		gain:	{ 'panel': 1 },
+		redo:	false,
 		start:	0,
 		fin:	0,
 	},
@@ -115,7 +146,11 @@ var tasks = {
 		cool:	0,
 		power:	0,
 		unlock: 0,
-		get gain() { return { waste: Math.ceil(Math.random() * 7) }; },
+		get gain() { 
+			if (Math.random() > 0.9)
+				addTask("repair");
+			return { waste: Math.ceil(Math.random() * 7) };
+		},
 		redo:	true,
 		start:	0,
 		fin:	0,
@@ -128,8 +163,6 @@ function initScene() {
 	minNavPane('res');
 	
 	addTask('wake');
-	
-	
 }
 
 function neededRes() {

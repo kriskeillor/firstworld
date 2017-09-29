@@ -22,6 +22,9 @@
 				</filter>
 			</defs>
 			
+			<!--<line id='plane' stroke='white' stroke-width='2'
+				x1='0' y1='450' x2='600' y2='450'/>-->
+			
 			<circle fill="white" cx="300" cy="450" r="98" filter="url(#blur)" />
 			
 			<path id='dawn' stroke-width="0" fill="#fcb54d" " d="
@@ -44,26 +47,26 @@
 		<div class='overlay'>
 			<div id="sidebar">
 				<table>
-					<tr>
-						<td>Luminosity</td>
+					<tr onClick="toggleInstruments('lux')" class='clicker'>
+						<td id="luxName">Luminosity</td>
 						<td id="lux" class="vital">0</td>
-						<td>klx</td></tr>
-					<tr>
-						<td>Solar Altitude</td>
-						<td id="altitude" class="vital">-6</td>
-						<td>&deg;</td></tr>
-					<tr>
-						<td>Solar Azimuth</td>
-						<td id="azimuth" class="vital">0</td>
-						<td>&deg;</td></tr>
-					<tr>
+						<td id="luxUnit">klx</td></tr>
+					<tr onClick="toggleInstruments('alti')" class='clicker'>
+						<td id="altiName">Solar Altitude</td>
+						<td id="alti" class="vital">-6</td>
+						<td id="altiUnit">&deg;</td></tr>
+					<tr onClick="toggleInstruments('azi')" class='clicker'>
+						<td id="aziName">Solar Azimuth</td>
+						<td id="azi" class="vital">0</td>
+						<td id="aziUnit">&deg;</td></tr>
+					<!--<tr>
 						<td>Windspeed</td>
 						<td id="windspeed" class="vital">0</td>
 						<td>kph</td></tr>
 					<tr>
 						<td>Temperature</td>
 						<td id="temp" class="vital">22</td>
-						<td>&deg; C</td></tr>
+						<td>&deg; C</td></tr>-->
 				</table>
 			</div>
 			

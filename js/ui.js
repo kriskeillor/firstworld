@@ -13,6 +13,22 @@ function minNavPane(pane) {
 	document.getElementById(pane).style.display = "none";
 }
 
+function toggleInstruments(instrument) {
+	var cost = display[instrument + "Cost"];
+	
+	if (display[instrument] == true) {
+		display[instrument] = false;
+		power.used -= cost;
+		document.getElementById(instrument).style.visibility = "collapse";
+		document.getElementById(instrument + "Unit").style.visibility = "collapse";
+	}
+	else if (power.max - power.used >= cost) {
+		power.used += cost;
+		document.getElementById(instrument).style.visibility = "visible";
+		document.getElementById(instrument + "Unit").style.visibility = "visible";
+	}
+}
+
 function openLog() {
 	maxNavPane("log");
 	smallNavPane("ui");
@@ -26,6 +42,8 @@ function closeLog() {
 }
 
 function addTask(id) {
+	if (tasks.available.indexOf(id) != -1)
+		return;
 	tasks.available.push(id);
 	
 	var js = 'onClick="startTask(\''+id+'\');"';
@@ -115,8 +133,7 @@ function finishTask(id) {
 		
 		for (i = 0; i < tasks[id].unlock.length; i++) {
 			var toAdd = tasks[id].unlock[i];
-			if (tasks.available.indexOf(toAdd) == -1)
-				addTask(toAdd);
+			addTask(toAdd);
 		}
 	}
 	
@@ -135,7 +152,6 @@ function finishTask(id) {
 		tasks.active.splice(tasks.active.indexOf(id), 1);
 		tasks.available.splice(tasks.available.indexOf(id), 1);
 		document.getElementById("bar" + id).outerHTML = "";
-		delete tasks[id];
 	}
 }
 
@@ -156,9 +172,11 @@ function gainRes(resName, count) {
 		flashRes(resName, "discovered");
 	}
 	
-	if (resName == 'power' && res.power >= 10) {
+	if (resName == 'power' && res.power >= res.capacitor * 10) {
 		discoverRes('capacitor');
 		flashRes('capacitor', "lacking");
+		if (document.getElementById('sidebar').style.visibility != "visible")
+			addTask("instruments");
 		return;
 	}
 	
@@ -178,7 +196,7 @@ function discoverRes(resName) {
 	var resCon = document.getElementById("res");
 	
 	var label = "<span class='resLabel'>" + resName + "</span>";
-	var counter = "<span class='resCounter' id='" + resName + "Count'>" + 0 + "</span>";
+	var counter = "<span class='resCounter' id='" + resName + "Count'>" + res[resName] + "</span>";
 	resCon.innerHTML += "<div id='" + resName + "' class='res bar'>" + label + counter + "</div>";
 }
 
