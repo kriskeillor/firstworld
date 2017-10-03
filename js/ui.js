@@ -55,11 +55,34 @@ function addTask(id) {
 }
 
 function startTask(id) {
+	if (tasks[id].mode == "pump" && tasks[id].cooling == false)
+		tasks[id].timer += tasks[id].pump;
+	
 	if (tasks.active.indexOf(id) != -1)
 		return;
 	
-	var lackRes = false;
+	if (checkResCost(id))
+		return;
 	
+	// spend resource cost
+	for (i = 0; i < res.list.length; i++) {
+		var resName = res.list[i];
+		var count = tasks[id].cost[resName];
+		if (count > 0)
+			spendRes(resName, tasks[id].cost[resName]);
+	}
+	
+	// unique functions 
+	if (tasks[id].start != 0) {
+		console.log("running " + id + " start func.");
+		tasks[id].start();
+	}
+	
+	tasks.active.push(id);
+}
+
+function checkResCost(id) {
+	var lackRes = false;
 	for (i = 0; i < res.list.length; i++) {
 		var resName = res.list[i];
 		
@@ -72,24 +95,7 @@ function startTask(id) {
 			flashRes(resName, "lacking");
 		}
 	}
-	
-	if (lackRes)
-		return;
-	
-	if (tasks[id].start != 0) {
-		console.log('start task ' + id);
-		tasks[id].start();
-	}
-	
-	for (i = 0; i < res.list.length; i++) {
-		var resName = res.list[i];
-		var count = tasks[id].cost[resName];
-		if (count > 0)
-			spendRes(resName, tasks[id].cost[resName]);
-	}
-	
-	tasks[id].timer = tasks[id].life;
-	tasks.active.push(id);
+	return lackRes;
 }
 
 function updateTasks() {
@@ -97,37 +103,47 @@ function updateTasks() {
 	
 	for (i = 0; i < tasks.active.length; i++) {
 		var id = tasks.active[i];
-		tasks[id].timer -= 1;
 		
-		if (tasks[id].timer <= 0)
+		tasks[id].timer += tasks[id].tick;
+		tasks[id].timer *= tasks[id].decay;
+		
+		if (tasks[id].timer >= tasks[id].max) {
+			tasks[id].timer = tasks[id].max;
 			finished.push(id);
+		}
+		
+		if (tasks[id].timer <= 0) {
+			tasks[id].cooling = true;
+			finished.push(id);
+		}
 		
 		// animation 
-		var per;
-		if (!tasks[id].cooling)
-			per = 100 - (tasks[id].timer / tasks[id].life) * 100;
-		else
-			per = (tasks[id].timer / tasks[id].cool) * 100;
+		var per = (tasks[id].timer / tasks[id].max) * 100;
 		document.getElementById("bar" + id).style.width = per + '%';
 	}
 	
-	for (i = 0; i < finished.length; i++) {
+	for (i = 0; i < finished.length; i++)
 		finishTask(finished[i]);
-	}
 }
 
 function finishTask(id) {
-	// Resource gathering and finishing cooldowns  
+	// Finish cooldown or gather resources 
 	if (tasks[id].cooling) {
 		tasks[id].cooling = false;
 		tasks.active.splice(tasks.active.indexOf(id), 1);
+		console.log(id + " finished cooling");
+		
+		if (tasks[id].end != 0) {
+			console.log("running " + id + " end func.");
+			tasks[id].end();
+		}
 		return;
 	}
 	else {
 		getResFromTask(id);
 		
 		if (tasks[id].fin != 0) {
-			console.log('finish task ' + id);
+			console.log("running " + id + " fin func.");
 			tasks[id].fin();
 		}
 		
@@ -141,7 +157,7 @@ function finishTask(id) {
 	if (tasks[id].redo) {
 		if (tasks[id].cool > 0) {
 			tasks[id].cooling = true;
-			tasks[id].timer = tasks[id].cool;
+			tasks[id].timer = tasks[id].max;
 		}
 		else {
 			tasks.active.splice(tasks.active.indexOf(id), 1);
@@ -153,6 +169,8 @@ function finishTask(id) {
 		tasks.available.splice(tasks.available.indexOf(id), 1);
 		document.getElementById("bar" + id).outerHTML = "";
 	}
+	
+	console.log(id + " finished");
 }
 
 function getResFromTask(id) {
@@ -172,14 +190,6 @@ function gainRes(resName, count) {
 		flashRes(resName, "discovered");
 	}
 	
-	if (resName == 'power' && res.power >= res.capacitor * 10) {
-		discoverRes('capacitor');
-		flashRes('capacitor', "lacking");
-		if (document.getElementById('sidebar').style.visibility != "visible")
-			addTask("instruments");
-		return;
-	}
-	
 	res[resName] += count;
 	document.getElementById(resName + "Count").innerHTML = res[resName];
 }
@@ -194,10 +204,13 @@ function discoverRes(resName) {
 	res.discovered.push(resName);
 	
 	var resCon = document.getElementById("res");
-	
-	var label = "<span class='resLabel'>" + resName + "</span>";
-	var counter = "<span class='resCounter' id='" + resName + "Count'>" + res[resName] + "</span>";
-	resCon.innerHTML += "<div id='" + resName + "' class='res bar'>" + label + counter + "</div>";
+	resCon.innerHTML += genResHtml(resName);
+}
+
+function genResHtml(name) {
+	var label = "<span class='resLabel'>" + name + "</span>";
+	var counter = "<span class='resCounter' id='" + name + "Count'>" + res[name] + "</span>";
+	return "<div id='" + name + "' class='res bar'>" + label + counter + "</div>";
 }
 
 function flashRes(resName, indicator) {	
@@ -228,8 +241,4 @@ function updateFlashes() {
 		res.flash[resName].scale -= 0.04;
 		res.flash[resName].scale *= 0.96;
 	}
-}
-
-function updateRes() {
-	//...
 }
