@@ -25,9 +25,11 @@ var power = {
 	used:		0,
 	get available() { return this.max - this.used; },
 	
+	dynActive:	false,
 	caps:		0, // stores the amount of capacitors used /when the dynamo is brought online/ (i.e. lags behind res cap count)
 	
 	dynOnline:	function() {
+		this.dynActive = true;
 		this.caps = res.capacitor; 
 		this.max += Math.pow(10, this.caps);
 		
@@ -37,6 +39,10 @@ var power = {
 	},
 	
 	dynOffline:	function() {
+		if (this.dynActive == false)
+			return;
+		
+		this.dynActive = false;
 		this.max -= Math.pow(10, this.caps);
 		
 		if (this.used > this.max) {
@@ -136,14 +142,13 @@ var tasks = {
 		timer:	0,
 		max:	500,
 		
-		get tick() { if (tasks.dynamo.cooling) return -0.15; else return -0.5; },
+		get tick() { if (this.cooling) return -0.1; else return -0.5; },
 		pump:	55,
-		get decay() { if (tasks.dynamo.cooling) return 1.0; else return 0.995; },
-		cool:	1,
+		get decay() { if (this.cooling) return 1.0; else return 0.995; },
 		cooling: false,
 		
 		redo:	true,
-		unlock: 0,
+		unlock: [ "instruments" ],
 		gain:	0,
 		
 		start:	0,
@@ -161,7 +166,6 @@ var tasks = {
 		
 		tick:	1,
 		decay:	1,
-		cool:	250,
 		
 		redo:	true,
 		unlock: 0,
@@ -200,9 +204,8 @@ var tasks = {
 		timer:	0,
 		max:	250,
 		
-		tick:	1,
+		get tick() { if (this.cooling) return -this.max; else return 1; },
 		decay:	1,
-		cool:	250,
 		
 		redo:	true,
 		unlock: 0,

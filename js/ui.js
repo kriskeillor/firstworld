@@ -55,6 +55,7 @@ function addTask(id) {
 }
 
 function startTask(id) {
+	// this is spaghetti
 	if (tasks[id].mode == "pump" && tasks[id].cooling == false)
 		tasks[id].timer += tasks[id].pump;
 	
@@ -65,25 +66,30 @@ function startTask(id) {
 		return;
 	
 	// spend resource cost
-	for (i = 0; i < res.list.length; i++) {
+	for (let i = 0; i < res.list.length; i++) {
 		var resName = res.list[i];
 		var count = tasks[id].cost[resName];
 		if (count > 0)
 			spendRes(resName, tasks[id].cost[resName]);
 	}
 	
+	// this is spaghetti 
+	if (tasks[id].mode != "pump")
+		tasks[id].timer = 0;
+	tasks[id].cooling = false;
+	tasks.active.push(id);
+	console.log("started " + id);
+	
 	// unique functions 
 	if (tasks[id].start != 0) {
 		console.log("running " + id + " start func.");
 		tasks[id].start();
 	}
-	
-	tasks.active.push(id);
 }
 
 function checkResCost(id) {
 	var lackRes = false;
-	for (i = 0; i < res.list.length; i++) {
+	for (let i = 0; i < res.list.length; i++) {
 		var resName = res.list[i];
 		
 		if (tasks[id].cost[resName] > res[resName])
@@ -99,82 +105,69 @@ function checkResCost(id) {
 }
 
 function updateTasks() {
-	var finished = [];
+	var active = tasks.active.slice(0);
 	
-	for (i = 0; i < tasks.active.length; i++) {
-		var id = tasks.active[i];
+	for (let i = 0; i < active.length; i++) {
+		var id = active[i];
 		
 		tasks[id].timer += tasks[id].tick;
 		tasks[id].timer *= tasks[id].decay;
 		
 		if (tasks[id].timer >= tasks[id].max) {
 			tasks[id].timer = tasks[id].max;
-			finished.push(id);
+			finishTask(id);
 		}
-		
-		if (tasks[id].timer <= 0) {
-			tasks[id].cooling = true;
-			finished.push(id);
-		}
-		
-		// animation 
-		var per = (tasks[id].timer / tasks[id].max) * 100;
-		document.getElementById("bar" + id).style.width = per + '%';
-	}
-	
-	for (i = 0; i < finished.length; i++)
-		finishTask(finished[i]);
-}
-
-function finishTask(id) {
-	// Finish cooldown or gather resources 
-	if (tasks[id].cooling) {
-		tasks[id].cooling = false;
-		tasks.active.splice(tasks.active.indexOf(id), 1);
-		console.log(id + " finished cooling");
-		
-		if (tasks[id].end != 0) {
-			console.log("running " + id + " end func.");
-			tasks[id].end();
-		}
-		return;
-	}
-	else {
-		getResFromTask(id);
-		
-		if (tasks[id].fin != 0) {
-			console.log("running " + id + " fin func.");
-			tasks[id].fin();
-		}
-		
-		for (i = 0; i < tasks[id].unlock.length; i++) {
-			var toAdd = tasks[id].unlock[i];
-			addTask(toAdd);
-		}
-	}
-	
-	// Starting cooldowns or removing tasks 
-	if (tasks[id].redo) {
-		if (tasks[id].cool > 0) {
-			tasks[id].cooling = true;
-			tasks[id].timer = tasks[id].max;
+		else if (tasks[id].timer <= 0) {
+			tasks[id].timer = 0;
+			endTask(id);
 		}
 		else {
+			var per = (tasks[id].timer / tasks[id].max) * 100;
+			document.getElementById("bar" + id).style.width = per + '%';
+		}
+	}
+}
+
+// Tasks are finished when their progress hits max
+function finishTask(id) {
+	getResFromTask(id);
+	getUnlocksFromTask(id);
+	var barElem = document.getElementById("bar" + id);
+	
+	if (tasks[id].redo) {
+		tasks[id].cooling = true;
+		
+		if (tasks[id].tick == -tasks[id].max) {
 			tasks.active.splice(tasks.active.indexOf(id), 1);
-			document.getElementById("bar" + id).style.width = '0%';
+			barElem.style.width = '0%';
 		}
 	}
 	else {
 		tasks.active.splice(tasks.active.indexOf(id), 1);
 		tasks.available.splice(tasks.available.indexOf(id), 1);
-		document.getElementById("bar" + id).outerHTML = "";
+		barElem.outerHTML = "";
 	}
 	
-	console.log(id + " finished");
+	console.log(id + " finished.");
+	if (tasks[id].fin != 0) {
+		console.log("running " + id + " fin func.");
+		tasks[id].fin();
+	}
+}
+
+//	Tasks are ended when their progress drops to zero 
+function endTask(id) {
+	tasks.active.splice(tasks.active.indexOf(id), 1);
+	
+	console.log(id + " ended.");
+	if (tasks[id].end != 0) {
+		console.log("running " + id + " end func.");
+		tasks[id].end();
+	}
 }
 
 function getResFromTask(id) {
-	for (i = 0; i < res.list.length; i++)
+	for (let i = 0; i < res.list.length; i++)
 	{
 		var resName = res.list[i];
 		var count = tasks[id].gain[resName];
@@ -182,6 +175,11 @@ function getResFromTask(id) {
 			gainRes(resName, count);
 		}
 	}
+}
+
+function getUnlocksFromTask(id) {
+	for (let i = 0; i < tasks[id].unlock.length; i++)
+		addTask(tasks[id].unlock[i]);
 }
 
 function gainRes(resName, count) {
@@ -234,7 +232,7 @@ function spendRes(resName, cost) {
 
 function updateFlashes() {
 	var nodes = document.getElementsByClassName('res');
-	for (i = 0; i < nodes.length; i++) {
+	for (let i = 0; i < nodes.length; i++) {
 		var resName = nodes[i].id;
 		nodes[i].style.backgroundColor = res.flash[resName].color + res.flash[resName].scale + ")";
 		
