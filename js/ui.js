@@ -14,19 +14,19 @@ function minNavPane(pane) {
 }
 
 function toggleInstruments(instrument) {
-	var cost = display[instrument + "Cost"];
+	/*var cost = display[instrument + "Cost"];
 	
 	if (display[instrument] == true) {
 		display[instrument] = false;
-		power.used -= cost;
+		//power.used -= cost;
 		document.getElementById(instrument).style.visibility = "collapse";
 		document.getElementById(instrument + "Unit").style.visibility = "collapse";
 	}
-	else if (power.max - power.used >= cost) {
-		power.used += cost;
+	else //if (power.max - power.used >= cost) {
+		//power.used += cost;
 		document.getElementById(instrument).style.visibility = "visible";
 		document.getElementById(instrument + "Unit").style.visibility = "visible";
-	}
+	}*/
 }
 
 function openLog() {
@@ -56,7 +56,7 @@ function addTask(id) {
 
 function startTask(id) {
 	// this is spaghetti
-	if (tasks[id].mode == "pump" && tasks[id].cooling == false)
+	if (tasks[id].mode == "pump") // && tasks[id].cooling == false)
 		tasks[id].timer += tasks[id].pump;
 	
 	if (tasks.active.indexOf(id) != -1)
@@ -78,11 +78,11 @@ function startTask(id) {
 		tasks[id].timer = 0;
 	tasks[id].cooling = false;
 	tasks.active.push(id);
-	console.log("started " + id);
+	console.log(id + " started");
 	
 	// unique functions 
 	if (tasks[id].start != 0) {
-		console.log("running " + id + " start func.");
+		console.log("running " + id + " start func");
 		tasks[id].start();
 	}
 }
@@ -130,6 +130,9 @@ function updateTasks() {
 
 // Tasks are finished when their progress hits max
 function finishTask(id) {
+	//if (tasks[id].cooling)
+	//	return;
+	
 	getResFromTask(id);
 	getUnlocksFromTask(id);
 	var barElem = document.getElementById("bar" + id);
@@ -148,9 +151,12 @@ function finishTask(id) {
 		barElem.outerHTML = "";
 	}
 	
-	console.log(id + " finished.");
+	if (tasks[id].cost.power > 0)
+		spendRes("power", -tasks[id].cost.power);
+	
+	console.log(id + " finished");
 	if (tasks[id].fin != 0) {
-		console.log("running " + id + " fin func.");
+		console.log("running " + id + " fin func");
 		tasks[id].fin();
 	}
 }
@@ -158,10 +164,11 @@ function finishTask(id) {
 //	Tasks are ended when their progress drops to zero 
 function endTask(id) {
 	tasks.active.splice(tasks.active.indexOf(id), 1);
+	document.getElementById("bar" + id).style.width = '0%';
+	console.log(id + " ended");
 	
-	console.log(id + " ended.");
 	if (tasks[id].end != 0) {
-		console.log("running " + id + " end func.");
+		console.log("running " + id + " end func");
 		tasks[id].end();
 	}
 }
@@ -183,10 +190,8 @@ function getUnlocksFromTask(id) {
 }
 
 function gainRes(resName, count) {
-	if (res.discovered.indexOf(resName) == -1) {
+	if (res.discovered.indexOf(resName) == -1) 
 		discoverRes(resName);
-		flashRes(resName, "discovered");
-	}
 	
 	res[resName] += count;
 	document.getElementById(resName + "Count").innerHTML = res[resName];
@@ -203,6 +208,8 @@ function discoverRes(resName) {
 	
 	var resCon = document.getElementById("res");
 	resCon.innerHTML += genResHtml(resName);
+	
+	flashRes(resName, "discovered");
 }
 
 function genResHtml(name) {
@@ -228,6 +235,10 @@ function flashRes(resName, indicator) {
 function spendRes(resName, cost) {
 	res[resName] -= cost;
 	document.getElementById(resName + "Count").innerHTML = res[resName];
+	
+	// this is spaghetti 
+	if (resName == "power")
+		document.getElementById("powerCount").innerHTML = res.power + "/" + power.max;
 }
 
 function updateFlashes() {

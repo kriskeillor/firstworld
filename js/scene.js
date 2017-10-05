@@ -7,6 +7,14 @@ var res = {
 	water:		0,
 	game:		0,
 	get power() { return power.available; },
+	set power(n){ power.available = n; },
+		//console.log("| available " + power.available + ", spending -" + n); 
+		//power.used = power.available - n;
+		//console.log("| used now = " + power.used);
+		//console.log("spending " + n + " power from res out of " + power.max);
+		//power.used = n;
+		//console.log("remaining: " + power.available);
+	//},
 	
 	//artificial 
 	waste:		0,
@@ -22,19 +30,22 @@ var res = {
 
 var power = {
 	max:		0,
-	used:		0,
-	get available() { return this.max - this.used; },
+	available:	0,
 	
 	dynActive:	false,
 	caps:		0, // stores the amount of capacitors used /when the dynamo is brought online/ (i.e. lags behind res cap count)
 	
 	dynOnline:	function() {
+		if (this.dynActive)
+			return;
+		
 		this.dynActive = true;
+		
+		this.max += Math.pow(10, res.capacitor);
+		this.available += this.max;
 		this.caps = res.capacitor; 
-		this.max += Math.pow(10, this.caps);
 		
 		discoverRes("power");
-		flashRes("power", "discovered");
 		document.getElementById("powerCount").innerHTML = this.available + "/" + this.max;
 	},
 	
@@ -43,18 +54,25 @@ var power = {
 			return;
 		
 		this.dynActive = false;
-		this.max -= Math.pow(10, this.caps);
+		let lostPower = Math.pow(10, this.caps);
+		this.max -= lostPower;
+		this.available -= lostPower;
 		
-		if (this.used > this.max) {
+		if (this.available < 0)
 			this.depower();
-			flashRes("power", "lacking");
-		}
 		
 		document.getElementById("powerCount").innerHTML = this.available + "/" + this.max;
 	},
 	
 	depower: function() {
-		console.log("EMERGENCY. FLUSH EVERYTHING");
+		this.available = this.max;
+		flashRes("power", "lacking");
+		
+		for (let i = 0; i < tasks.active.length; i++) {
+			let id = tasks.active[i];
+			if (tasks[id].cost.power > 0) 
+				endTask(id);
+		}
 	}
 }
 
@@ -74,7 +92,6 @@ var tasks = {
 	
 	wake: {
 		msg:	"open window",
-		power:	0,
 		cost:	0,
 		
 		timer:	0,
@@ -110,8 +127,7 @@ var tasks = {
 	
 	instruments: {
 		msg:	"check instruments",
-		power:	0,						// should this cost power? probably 
-		cost:	0,
+		cost:	{ 'power': 3 },
 		
 		timer:	0,
 		max:	50,
@@ -120,7 +136,7 @@ var tasks = {
 		decay:	1,
 		
 		redo:	false,
-		unlock: [ 'scout', ],
+		unlock: [ 'scout', 'buildCap' ],
 		gain:	0,
 		start:	function () {
 			document.getElementById('sidebar').style.visibility = "visible";
@@ -129,14 +145,13 @@ var tasks = {
 			toggleInstruments("alti");
 			toggleInstruments("azi");
 		},
-		fin:	0,
+		fin:	function() { delete tasks.instruments; },
 		end:	0,
 	},
 	
 	dynamo: {
 		mode:	"pump",
 		msg:	"pump dynamo",
-		power:	0,
 		cost:	0,
 		
 		timer:	0,
@@ -144,7 +159,7 @@ var tasks = {
 		
 		get tick() { if (this.cooling) return -0.1; else return -0.5; },
 		pump:	55,
-		get decay() { if (this.cooling) return 1.0; else return 0.995; },
+		get decay() { if (this.cooling) return 1.0; else return 0.9975; },
 		cooling: false,
 		
 		redo:	true,
@@ -158,13 +173,12 @@ var tasks = {
 	
 	buildCap: {
 		msg:	"wire capacitor bank",
-		power:	0,
 		cost:	{ 'carbon': 10, 'alloy': 15 },
 		
 		timer:	0,
 		max:	250,
 		
-		tick:	1,
+		get tick() { if (this.cooling) return -this.max; else return 1; },
 		decay:	1,
 		
 		redo:	true,
@@ -178,11 +192,10 @@ var tasks = {
 	
 	repair: {
 		msg:	"repair solar panel",
-		power:	0,
-		cost:	0,
+		cost:	{ 'power': 2 },
 		
 		timer:	0,
-		max:	250,
+		max:	200,
 		
 		tick:	1,
 		decay:	1,
@@ -198,7 +211,6 @@ var tasks = {
 	
 	scout: {
 		msg:	"scout",
-		power:	0,
 		cost:	0,
 		
 		timer:	0,
@@ -212,7 +224,7 @@ var tasks = {
 		get gain() { 
 			if (Math.random() > 0.9)
 				addTask("repair");
-			return { waste: Math.ceil(Math.random() * 7) };
+			return { carbon: Math.ceil(Math.random() * 7), alloy: Math.ceil(Math.random() * 3) };
 		},
 		
 		start:	0,
