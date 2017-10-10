@@ -1,28 +1,24 @@
 var res = {
-	list: 		[ 'water', 'game', 'power', 'waste', 'polythread', 'carbon', 'alloy', 'capacitor', 'panel' ],
+	list: 		[ 'water', 'meals', 'rations', 'power', 'waste', 'polythread', 'crystal', 'metal', 'capacitor', 'panel', 'grinder', 'dynamo' ],
 	discovered:	[],
-	flash: 		{ water: {}, game: {}, power: {}, waste: {}, polythread: {}, carbon: {}, alloy: {}, capacitor: {}, panel: {} },
+	flash: 		{ water: {}, meals: {}, rations: {}, power: {}, waste: {}, polythread: {}, crystal: {}, metal: {}, capacitor: {}, panel: {}, grinder: {}, dynamo: {} },
+	
+	get power() { return power.available; },
+	set power(n){ power.available = n; },
 	
 	//natural 
 	water:		0,
-	game:		0,
-	get power() { return power.available; },
-	set power(n){ power.available = n; },
-		//console.log("| available " + power.available + ", spending -" + n); 
-		//power.used = power.available - n;
-		//console.log("| used now = " + power.used);
-		//console.log("spending " + n + " power from res out of " + power.max);
-		//power.used = n;
-		//console.log("remaining: " + power.available);
-	//},
+	meals:		0,
+	rations:	0,
 	
 	//artificial 
 	waste:		0,
 	polythread: 0,
-	carbon:		0,
-	alloy:		0,
+	crystal:	0,
+	metal:		0,
 	
 	//structures 
+	dynamo:		1,
 	capacitor:	1,
 	panel:		0,
 	grinder:	0,
@@ -35,13 +31,15 @@ var power = {
 	dynActive:	false,
 	caps:		0, // stores the amount of capacitors used /when the dynamo is brought online/ (i.e. lags behind res cap count)
 	
+	prevSolar:	0,
+	
 	dynOnline:	function() {
 		if (this.dynActive)
 			return;
 		
 		this.dynActive = true;
 		
-		this.max += Math.pow(10, res.capacitor);
+		this.max += res.capacitor * 10;
 		this.available += this.max;
 		this.caps = res.capacitor; 
 		
@@ -54,12 +52,24 @@ var power = {
 			return;
 		
 		this.dynActive = false;
-		let lostPower = Math.pow(10, this.caps);
+		let lostPower = this.caps * 10;
 		this.max -= lostPower;
 		this.available -= lostPower;
 		
 		if (this.available < 0)
 			this.depower();
+		
+		document.getElementById("powerCount").innerHTML = this.available + "/" + this.max;
+	},
+	
+	checkSolar: function() {
+		if (res.panel == 0)
+			return;
+		
+		this.available -= this.prevSolar;
+		let newSolar = Math.floor(p.lux * 0.005 * res.panel);
+		this.available += newSolar;
+		this.prevSolar = newSolar;
 		
 		document.getElementById("powerCount").innerHTML = this.available + "/" + this.max;
 	},
@@ -173,7 +183,7 @@ var tasks = {
 	
 	buildCap: {
 		msg:	"wire capacitor bank",
-		cost:	{ 'carbon': 10, 'alloy': 15 },
+		cost:	{ 'crystal': 10, 'metal': 15 },
 		
 		timer:	0,
 		max:	250,
@@ -214,7 +224,7 @@ var tasks = {
 		cost:	0,
 		
 		timer:	0,
-		max:	250,
+		max:	200,
 		
 		get tick() { if (this.cooling) return -this.max; else return 1; },
 		decay:	1,
@@ -224,7 +234,7 @@ var tasks = {
 		get gain() { 
 			if (Math.random() > 0.9)
 				addTask("repair");
-			return { carbon: Math.ceil(Math.random() * 7), alloy: Math.ceil(Math.random() * 3) };
+			return { crystal: Math.ceil(Math.random() * 10) + 2, metal: Math.ceil(Math.random() * 10) + 2 };
 		},
 		
 		start:	0,

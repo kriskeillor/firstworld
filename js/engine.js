@@ -5,6 +5,7 @@ function load() {
 	setInterval(function() {
 		moveSystem();
 		writeSurface();
+		power.checkSolar();
 		updateTasks();
 		updateFlashes();
 	}, 20);
