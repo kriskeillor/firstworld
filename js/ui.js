@@ -174,10 +174,11 @@ function endTask(id) {
 }
 
 function getResFromTask(id) {
+	let gains = tasks[id].gain;		// reduce getter calculations 
 	for (let i = 0; i < res.list.length; i++)
 	{
-		var resName = res.list[i];
-		var count = tasks[id].gain[resName];
+		let resName = res.list[i];
+		let count = gains[resName];
 		if (count > 0) {
 			gainRes(resName, count);
 		}

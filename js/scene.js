@@ -6,18 +6,18 @@ var res = {
 	get power() { return power.available; },
 	set power(n){ power.available = n; },
 	
-	//natural 
+	//natural
 	water:		0,
 	meals:		0,
 	rations:	0,
 	
-	//artificial 
+	//artificial
 	waste:		0,
 	polythread: 0,
 	crystal:	0,
 	metal:		0,
 	
-	//structures 
+	//structures
 	dynamo:		1,
 	capacitor:	1,
 	panel:		0,
@@ -111,11 +111,11 @@ var tasks = {
 		decay:	1,
 		
 		redo:	false,
-		unlock: [ 'dynamo' ], 
+		unlock: [ 'supply', 'dynamo' ], 
 		gain:	0,
 		
 		start:	function() {
-			p.angVel = 0.04;
+			p.angVel = 0.05;
 			var lerpVal = 0;
 			var max = 100; // (i.e. task's lifespan)
 			setInterval( function() {
@@ -241,6 +241,53 @@ var tasks = {
 		fin:	0,
 		end:	0,
 	},
+	
+	supply: {
+		msg:	"make supply run",
+		cost:	0,
+		
+		timer:	0,
+		max:	50,
+		//get max() { return this.gain * 10; },
+		
+		get tick() { if (this.cooling) return -1; else return 1; },
+		decay:	0.99,
+		
+		redo:	true,
+		unlock:	0,
+		get gain() {
+			let note = "";
+			let gains = {};
+			for (let i = 0; i < tasks.available.length; i++) {
+				id = tasks.available[i];
+				if (tasks.active.indexOf(id) == -1) {
+					let allCosts = tasks[id].cost;
+					//feedback
+					//if (allCosts > 0)
+					//console.log(id + " costs " + allCosts);
+					for (let n = 0; n < res.discovered.length; n++) {
+						let thisCost = allCosts[res.discovered[n]];
+						//feedback
+						//if (thisCost > 0)
+						//console.log(thisCost + " cost on " + res.discovered[n]);
+						if (thisCost > res[res.discovered[n]]) {
+							let diff = thisCost - res[n];
+							//feedback 
+							//console.log(diff + " difference in " + res[n]);
+							if (gains[n] == undefined || gains[n] == null || diff > gains[n]) 
+								gains[n] = diff;
+						}
+					}
+				}
+			}
+			console.log(gains);
+			return gains;
+		},
+		
+		start:	0,
+		fin:	0,
+		end:	0,
+	}
 };
 
 function initScene() {

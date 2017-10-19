@@ -31,7 +31,7 @@ function writeSurface() {
 	else if (p.angle <= 270)
 		s.altitude = 180 - p.angle;
 	else 
-		s.altitude = 360 - p.angle;
+		s.altitude = p.angle - 360;
 	
 	document.getElementById('alti').innerHTML = Math.round(s.altitude);
 	document.getElementById('azi').innerHTML = Math.round(wrapDegrees(p.angle) + 180);
