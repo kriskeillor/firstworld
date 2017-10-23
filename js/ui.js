@@ -44,6 +44,10 @@ function closeLog() {
 function addTask(id) {
 	if (tasks.available.indexOf(id) != -1)
 		return;
+	if (tasks[id] == undefined) {
+		console.log("! task '" + id + "' is not defined");
+		return;
+	}
 	tasks.available.push(id);
 	
 	var js = 'onClick="startTask(\''+id+'\');"';
