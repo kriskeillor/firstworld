@@ -111,7 +111,7 @@ var tasks = {
 		decay:	1,
 		
 		redo:	false,
-		unlock: [ 'supply', 'dynamo' ], 
+		unlock: [ 'dynamo', 'supply' ], 
 		gain:	0,
 		
 		start:	function() {
@@ -119,8 +119,7 @@ var tasks = {
 			var lerpVal = 0;
 			var max = 100; // (i.e. task's lifespan)
 			setInterval( function() {
-				if (lerpVal < max)
-				{
+				if (lerpVal < max) {
 					lerpVal++;
 					var fadeColor = lerpColor(colors.dark, colors.blue, lerpVal / max);
 					var bg = "-webkit-linear-gradient(top, " + colors.dark + ", " + fadeColor + ")";
@@ -248,7 +247,6 @@ var tasks = {
 		
 		timer:	0,
 		max:	500,
-		//get max() { return this.gain * 10 + 10; },
 		
 		get tick() { if (this.cooling) return -1; else return 1; },
 		decay:	1,
@@ -271,6 +269,7 @@ var tasks = {
 					}
 				}
 			}
+			gains[power] = 0;
 			return gains;
 		},
 		

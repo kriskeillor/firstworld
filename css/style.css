@@ -109,6 +109,7 @@ td.vital {
 .clicker {
     cursor: pointer;
     cursor: hand;
+	line-height: 18px;
 }
 
 #ui.div {

@@ -56,6 +56,7 @@ function addTask(id) {
 	document.getElementById('ui').innerHTML += html + tasks[id].msg + "</div>";
 	document.getElementById("bar" + id).style.width = "0%";
 	document.getElementById("bar" + id).style.backgroundColor = "#454545";
+	document.getElementById("bar" + id).style.marginBottom = "2px";
 }
 
 function startTask(id) {
