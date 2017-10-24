@@ -44,17 +44,17 @@
 		<div class='overlay'>
 			<div id="sidebar">
 				<table>
-					<tr onClick="toggleInstruments('lux')" class='clicker'>
+					<tr id="lux" onClick="toggleInstruments('lux')" class='clicker vitRow'>
 						<td id="luxName">Luminosity</td>
-						<td id="lux" class="vital">0</td>
+						<td id="luxCount" class="vital">0</td>
 						<td id="luxUnit">klx</td></tr>
-					<tr onClick="toggleInstruments('alti')" class='clicker'>
+					<tr id="alti" onClick="toggleInstruments('alti')" class='clicker vitRow'>
 						<td id="altiName">Solar Altitude</td>
-						<td id="alti" class="vital">-6</td>
+						<td id="altiCount" class="vital">-6</td>
 						<td id="altiUnit">&deg;</td></tr>
-					<tr onClick="toggleInstruments('azi')" class='clicker'>
+					<tr id="azi" onClick="toggleInstruments('azi')" class='clicker vitRow'>
 						<td id="aziName">Solar Azimuth</td>
-						<td id="azi" class="vital">0</td>
+						<td id="aziCount" class="vital">0</td>
 						<td id="aziUnit">&deg;</td></tr>
 					<!--<tr>
 						<td>Windspeed</td>
@@ -73,15 +73,15 @@
 			
 			<form>
 				<fieldset id='log'>
-					<legend id="logLeg">Log</legend>
+					<legend id="logLeg">terminal / log</legend>
 				</fieldset>
 				
 				<fieldset id='ui'>
-					<legend id="uiLeg">Outpost</legend>
+					<legend id="uiLeg">outpost / assignment</legend>
 				</fieldset>
 				
 				<fieldset id='res'>
-					<legend id="resLeg">Resources</legend>
+					<legend id="resLeg">outpost / records</legend>
 				</fieldset>
 			</form>
 		</div>

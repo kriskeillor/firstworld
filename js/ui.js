@@ -13,22 +13,6 @@ function minNavPane(pane) {
 	document.getElementById(pane).style.display = "none";
 }
 
-function toggleInstruments(instrument) {
-	/*var cost = display[instrument + "Cost"];
-	
-	if (display[instrument] == true) {
-		display[instrument] = false;
-		//power.used -= cost;
-		document.getElementById(instrument).style.visibility = "collapse";
-		document.getElementById(instrument + "Unit").style.visibility = "collapse";
-	}
-	else //if (power.max - power.used >= cost) {
-		//power.used += cost;
-		document.getElementById(instrument).style.visibility = "visible";
-		document.getElementById(instrument + "Unit").style.visibility = "visible";
-	}*/
-}
-
 function openLog() {
 	maxNavPane("log");
 	smallNavPane("ui");
@@ -156,8 +140,8 @@ function finishTask(id) {
 		barElem.outerHTML = "";
 	}
 	
-	if (tasks[id].cost.power > 0)
-		spendRes("power", -tasks[id].cost.power);
+	if (tasks[id].cost.electricity > 0)
+		spendRes("electricity", -tasks[id].cost.electricity);
 	
 	console.log(id + " finished");
 	if (tasks[id].fin != 0) {
@@ -219,7 +203,7 @@ function discoverRes(resName) {
 }
 
 function genResHtml(name) {
-	var label = "<span class='resLabel'>" + name + "</span>";
+	var label = "<span class='resLabel'>" + name + "</span> <span class='unitLabel'>" + res.label[name] + "</span>";
 	var counter = "<span class='resCounter' id='" + name + "Count'>" + res[name] + "</span>";
 	return "<div id='" + name + "' class='res bar'>" + label + counter + "</div>";
 }
@@ -243,8 +227,8 @@ function spendRes(resName, cost) {
 	document.getElementById(resName + "Count").innerHTML = res[resName];
 	
 	// this is spaghetti 
-	if (resName == "power")
-		document.getElementById("powerCount").innerHTML = res.power + "/" + power.max;
+	if (resName == "electricity")
+		document.getElementById("electricityCount").innerHTML = res.electricity + "/" + power.max;
 }
 
 function updateFlashes() {

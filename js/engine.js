@@ -33,8 +33,8 @@ function writeSurface() {
 	else 
 		s.altitude = p.angle - 360;
 	
-	document.getElementById('alti').innerHTML = Math.round(s.altitude);
-	document.getElementById('azi').innerHTML = Math.round(wrapDegrees(p.angle) + 180);
+	document.getElementById('altiCount').innerHTML = Math.round(s.altitude);
+	document.getElementById('aziCount').innerHTML = Math.round(wrapDegrees(p.angle) + 180);
 	
 	// lux
 	if (s.altitude > -10)
@@ -42,7 +42,7 @@ function writeSurface() {
 	else
 		p.lux = 0;
 	var roundedLux = roundToTenth(p.lux);
-	document.getElementById('lux').innerHTML = roundedLux;
+	document.getElementById('luxCount').innerHTML = roundedLux;
 	if (roundedLux % 1 == 0)
-		document.getElementById('lux').innerHTML += ".0";
+		document.getElementById('luxCount').innerHTML += ".0";
 }

@@ -99,6 +99,15 @@ td.vital {
 	text-align: left;
 }
 
+.unitLabel {
+	font-style: italic;
+	color: #454545;
+}
+
+.vitRow { 
+	visibility: hidden;
+}
+
 /* GUI */
 .bar {
     height: 1em;

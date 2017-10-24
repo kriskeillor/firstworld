@@ -1,15 +1,17 @@
 var res = {
-	list: 		[ 'water', 'meals', 'rations', 'power', 'waste', 'polythread', 'crystal', 'metal', 'capacitor', 'panel', 'grinder', 'dynamo' ],
+	list: 		[ 'water', 'meals', 'rations', 'electricity', 'waste', 'polythread', 'crystal', 'metal', 'capacitor', 'panel', 'grinder', 'dynamo' ],
 	discovered:	[],
-	flash: 		{ water: {}, meals: {}, rations: {}, power: {}, waste: {}, polythread: {}, crystal: {}, metal: {}, capacitor: {}, panel: {}, grinder: {}, dynamo: {} },
+	label:		{ water: " (ltr)", meals: "", rations: "", electricity: " (KWh)", waste: " (kg)", polythread: " (kg)", crystal: " (GHz)", metal: " (kg)", capacitor: " (KWh)", panel: " (m<sup>2</sup>)", grinder: "", dynamo: "" },
+	flash: 		{ water: {}, meals: {}, rations: {}, electricity: {}, waste: {}, polythread: {}, crystal: {}, metal: {}, capacitor: {}, panel: {}, grinder: {}, dynamo: {} },
 	
-	get power() { return power.available; },
-	set power(n){ power.available = n; },
+	get electricity() { return power.available; },
+	set electricity(n){ power.available = n; },
 	
 	//natural
 	water:		0,
 	meals:		0,
 	rations:	0,
+	//	textile?
 	
 	//artificial
 	waste:		0,
@@ -43,8 +45,8 @@ var power = {
 		this.available += this.max;
 		this.caps = res.capacitor; 
 		
-		discoverRes("power");
-		document.getElementById("powerCount").innerHTML = this.available + "/" + this.max;
+		discoverRes("electricity");
+		document.getElementById("electricityCount").innerHTML = this.available + "/" + this.max;
 	},
 	
 	dynOffline:	function() {
@@ -59,7 +61,7 @@ var power = {
 		if (this.available < 0)
 			this.depower();
 		
-		document.getElementById("powerCount").innerHTML = this.available + "/" + this.max;
+		document.getElementById("electricityCount").innerHTML = this.available + "/" + this.max;
 	},
 	
 	checkSolar: function() {
@@ -71,16 +73,16 @@ var power = {
 		this.available += newSolar;
 		this.prevSolar = newSolar;
 		
-		document.getElementById("powerCount").innerHTML = this.available + "/" + this.max;
+		document.getElementById("electricityCount").innerHTML = this.available + "/" + this.max;
 	},
 	
 	depower: function() {
 		this.available = this.max;
-		flashRes("power", "lacking");
+		flashRes("electricity", "lacking");
 		
 		for (let i = 0; i < tasks.active.length; i++) {
 			let id = tasks.active[i];
-			if (tasks[id].cost.power > 0) 
+			if (tasks[id].cost.electricity > 0) 
 				endTask(id);
 		}
 	}
@@ -101,7 +103,7 @@ var tasks = {
 	active: [],
 	
 	wake: {
-		msg:	"open window",
+		msg:	"let there be lux",
 		cost:	0,
 		
 		timer:	0,
@@ -116,13 +118,13 @@ var tasks = {
 		
 		start:	function() {
 			p.angVel = 0.05;
-			var lerpVal = 0;
-			var max = 100; // (i.e. task's lifespan)
+			let lerpVal = 0;
+			let max = 100; // (i.e. task's lifespan)
 			setInterval( function() {
 				if (lerpVal < max) {
 					lerpVal++;
-					var fadeColor = lerpColor(colors.dark, colors.blue, lerpVal / max);
-					var bg = "-webkit-linear-gradient(top, " + colors.dark + ", " + fadeColor + ")";
+					let fadeColor = lerpColor(colors.dark, colors.blue, lerpVal / max);
+					let bg = "-webkit-linear-gradient(top, " + colors.dark + ", " + fadeColor + ")";
 					document.getElementsByTagName("body")[0].style.background = bg;
 					document.getElementById("blurFe").setAttribute('stdDeviation', 3.0 * (lerpVal / max));
 					
@@ -135,11 +137,11 @@ var tasks = {
 	},
 	
 	instruments: {
-		msg:	"check instruments",
-		cost:	{ 'power': 3 },
+		msg:	"let the place of the sun be known",
+		cost:	{ 'electricity': 3 },
 		
 		timer:	0,
-		max:	50,
+		max:	60,
 		
 		tick:	1,
 		decay:	1,
@@ -148,11 +150,16 @@ var tasks = {
 		unlock: [ 'scout', 'buildCap' ],
 		gain:	0,
 		start:	function () {
-			document.getElementById('sidebar').style.visibility = "visible";
-			
-			toggleInstruments("lux");
-			toggleInstruments("alti");
-			toggleInstruments("azi");
+			let count = 0;
+			setInterval( function() {
+				count++;
+				if (count == 20)
+					document.getElementById("lux").style.visibility = "visible";
+				else if (count == 40)
+					document.getElementById("alti").style.visibility = "visible";
+				else if (count == 60)
+					document.getElementById("azi").style.visibility = "visible";
+			}, 20);
 		},
 		fin:	function() { delete tasks.instruments; },
 		end:	0,
@@ -160,7 +167,7 @@ var tasks = {
 	
 	dynamo: {
 		mode:	"pump",
-		msg:	"pump dynamo",
+		msg:	"let there be electricity",
 		cost:	0,
 		
 		timer:	0,
@@ -181,7 +188,7 @@ var tasks = {
 	},
 	
 	buildCap: {
-		msg:	"wire capacitor bank",
+		msg:	"let not our efforts trickle away",
 		cost:	{ 'crystal': 10, 'metal': 15 },
 		
 		timer:	0,
@@ -201,7 +208,7 @@ var tasks = {
 	
 	repair: {
 		msg:	"repair solar panel",
-		cost:	{ 'power': 2 },
+		cost:	{ 'electricity': 2 },
 		
 		timer:	0,
 		max:	200,
@@ -219,7 +226,7 @@ var tasks = {
 	},
 	
 	scout: {
-		msg:	"scout",
+		msg:	"let the lay of the land be known",
 		cost:	0,
 		
 		timer:	0,
@@ -242,7 +249,7 @@ var tasks = {
 	},
 	
 	supply: {
-		msg:	"make supply run",
+		msg:	"let there be rest",
 		cost:	0,
 		
 		timer:	0,
@@ -269,7 +276,9 @@ var tasks = {
 					}
 				}
 			}
-			gains[power] = 0;
+			
+			if (gains[electricity] != undefined)
+				gains[electricity] = 0;
 			return gains;
 		},
 		
