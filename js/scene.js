@@ -1,7 +1,7 @@
 var res = {
 	list: 		[ 'water', 'meals', 'rations', 'electricity', 'waste', 'polythread', 'crystal', 'metal', 'capacitor', 'panel', 'grinder', 'dynamo' ],
 	discovered:	[],
-	label:		{ water: " (ltr)", meals: "", rations: "", electricity: " (KWh)", waste: " (kg)", polythread: " (kg)", crystal: " (GHz)", metal: " (kg)", capacitor: " (KWh)", panel: " (m<sup>2</sup>)", grinder: "", dynamo: "" },
+	label:		{ water: " (ltr)", meals: "", rations: "", electricity: " (KWh)", waste: " (kg)", polythread: " (kg)", crystal: " (GHz)", metal: " (kg)", capacitor: " (KWh)", panel: " (m²)", grinder: "", dynamo: "" },
 	flash: 		{ water: {}, meals: {}, rations: {}, electricity: {}, waste: {}, polythread: {}, crystal: {}, metal: {}, capacitor: {}, panel: {}, grinder: {}, dynamo: {} },
 	
 	get electricity() { return power.available; },
