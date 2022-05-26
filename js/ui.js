@@ -36,7 +36,7 @@ function addTask(id) {
 	
 	var js = 'onClick="startTask(\''+id+'\');"';
 	var bar = "<div id='bar" + id + "' class='bar'>"
-	var html = bar + "<a id='" + id + "'" + js + " class='clicker'>";
+	var html = bar + "<a id='" + id + "'" + js + " class='clicker unselectable'>";
 	document.getElementById('ui').innerHTML += html + tasks[id].msg + "</div>";
 	document.getElementById("bar" + id).style.width = "0%";
 	document.getElementById("bar" + id).style.backgroundColor = "#454545";
@@ -205,7 +205,7 @@ function discoverRes(resName) {
 function genResHtml(name) {
 	var label = "<span class='resLabel'>" + name + "</span> <span class='unitLabel'>" + res.label[name] + "</span>";
 	var counter = "<span class='resCounter' id='" + name + "Count'>" + res[name] + "</span>";
-	return "<div id='" + name + "' class='res bar'>" + label + counter + "</div>";
+	return "<div id='" + name + "' class='res bar unselectable'>" + label + counter + "</div>";
 }
 
 function flashRes(resName, indicator) {	
